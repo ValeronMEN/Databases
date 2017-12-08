@@ -15,13 +15,15 @@ def index(request):
 
 
 def output_xml(request):
-    input_database = dbconnector.get_all_essences()
-    dbconnector.create_xml_file(dbconnector.create_xml_template(input_database))
+    output_database = dbconnector.get_all_tables()
+    dbconnector.create_xml_file(dbconnector.create_xml_template(output_database))
     return HttpResponse("<h1>Success!</h1>")
 
 
 def input_xml(request):
-    dbconnector.parse_xml_file()
+    input_database = dbconnector.parse_xml_file()
+    dbconnector.clear_all_tables()
+    dbconnector.insert_all_tables(input_database)
     return HttpResponse("<h1>Success!</h1>")
 
 

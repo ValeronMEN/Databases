@@ -31,7 +31,7 @@ def get_all_table_essences(table_name):
         return merge_column_names_and_values(rows, field_names)
 
 
-def get_all_essences():
+def get_all_tables():
     con = mdb.connect('localhost', 'root', '', 'guitars')
     with con:
         cur = con.cursor()
@@ -40,9 +40,64 @@ def get_all_essences():
         output_database = {}
         for row in rows:
             table = get_all_table_essences(row[0])
-            if (len(table) != 0):
+            if len(table) != 0:
                 output_database.update({row[0]: table})
     return output_database
+
+
+def insert_table(table, table_name):
+    con = mdb.connect('localhost', 'root', '', 'guitars')
+    with con:
+        cur = con.cursor()
+        tags = ""
+        for essence in table:
+            values = ""
+            n = 0
+            nk = len(essence)
+            if tags == "":
+                for tag, value in essence.items():
+                    values += "'" + str(value) + "'"
+                    tags += tag
+                    if nk - 1 > n:
+                        values += ", "
+                        tags += ", "
+                    n = n + 1
+            else:
+                for tag, value in essence.items():
+                    values += "'" + str(value) + "'"
+                    if nk - 1 > n:
+                        values += ", "
+                    n = n + 1
+            request = "INSERT INTO %s(%s) VALUES(%s);" % (table_name, tags, values)
+            cur.execute(request)
+
+
+def insert_all_tables(input_database):
+    con = mdb.connect('localhost', 'root', '', 'guitars')
+    with con:
+        cur = con.cursor()
+        for name, table in input_database.items():
+            insert_table(table, name)
+    return
+
+
+def clear_table_data(table_name):
+    con = mdb.connect('localhost', 'root', '', 'guitars')
+    with con:
+        cur = con.cursor()
+        cur.execute("TRUNCATE TABLE %s" % table_name)
+    return
+
+
+def clear_all_tables():
+    con = mdb.connect('localhost', 'root', '', 'guitars')
+    with con:
+        cur = con.cursor()
+        cur.execute("SHOW TABLES")
+        rows = cur.fetchall()
+        for row in rows:
+            clear_table_data(row[0])
+    return
 
 
 def parse_xml_file():
@@ -50,11 +105,13 @@ def parse_xml_file():
     root = tree.getroot()
     input_database = {}
     for table in root:
+        tbl = []
         for essence in table:
-            es = []
+            es = {}
             for element in essence:
-                es.append({element.tag: element.text.replace(' ', '').replace('\n', '')})
-            input_database.update({table.tag: es})
+                es.update({element.tag: element.text.replace(' ', '').replace('\n', '')})
+            tbl.append(es)
+        input_database.update({table.tag: tbl})
     return input_database
 
 
@@ -82,7 +139,7 @@ def create_xml_template(input_database):
             guitar = SubElement(guitars, 'essence')
             for title, value in essence.items():
                 element = SubElement(guitar, title)
-                if type(value).__name__ != "str":
+                if type(value).__name__ == "long":
                     value = str(value)
                 element.text = value
     return prettify(top)
