@@ -1,7 +1,42 @@
 <?xml version="1.0" ?>
 <guitar_shop>
-  <guitar>
-    <essence>
+  <customers>
+    <instance>
+      <lastname>
+        Boliliy
+      </lastname>
+      <ID>
+        1
+      </ID>
+      <firstname>
+        Dimka
+      </firstname>
+    </instance>
+    <instance>
+      <lastname>
+        Behavandi
+      </lastname>
+      <ID>
+        2
+      </ID>
+      <firstname>
+        Behrang
+      </firstname>
+    </instance>
+    <instance>
+      <lastname>
+        Petrov
+      </lastname>
+      <ID>
+        3
+      </ID>
+      <firstname>
+        Misha
+      </firstname>
+    </instance>
+  </customers>
+  <guitars>
+    <instance>
       <name>
         KP-5453
       </name>
@@ -20,8 +55,8 @@
       <ID>
         1
       </ID>
-    </essence>
-    <essence>
+    </instance>
+    <instance>
       <name>
         RR453
       </name>
@@ -40,8 +75,8 @@
       <ID>
         2
       </ID>
-    </essence>
-    <essence>
+    </instance>
+    <instance>
       <name>
         KP45
       </name>
@@ -60,13 +95,13 @@
       <ID>
         3
       </ID>
-    </essence>
-    <essence>
+    </instance>
+    <instance>
       <name>
         RRR5
       </name>
       <producer>
-        Poland, Factory Virginia Block 890
+        Poland,FactoryVirginiaBlock890
       </producer>
       <color>
         white
@@ -80,6 +115,6 @@
       <ID>
         4
       </ID>
-    </essence>
-  </guitar>
+    </instance>
+  </guitars>
 </guitar_shop>
