@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Guitars</title>
+</head>
+<body>
+    <ul>
+        {% for guitar in guitars %}
+        <li>{{ guitar.name }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

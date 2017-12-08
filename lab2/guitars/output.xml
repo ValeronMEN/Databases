@@ -1,0 +1,65 @@
+<?xml version="1.0" ?>
+<guitar_shop>
+  <guitar>
+    <essence>
+      <name>
+        KP-5453
+      </name>
+      <producer>
+        Poland, Factory Virginia Block 890
+      </producer>
+      <color>
+        brown
+      </color>
+      <brand>
+        Yamaha
+      </brand>
+      <type>
+        electroguitar
+      </type>
+      <ID>
+        1
+      </ID>
+    </essence>
+    <essence>
+      <name>
+        RR453
+      </name>
+      <producer>
+        Poland, Factory Virginia Block 890
+      </producer>
+      <color>
+        brown
+      </color>
+      <brand>
+        Yamaha
+      </brand>
+      <type>
+        electroguitar
+      </type>
+      <ID>
+        2
+      </ID>
+    </essence>
+    <essence>
+      <name>
+        KP45
+      </name>
+      <producer>
+        Poland, Factory Virginia Block 890
+      </producer>
+      <color>
+        brown
+      </color>
+      <brand>
+        Yamaha
+      </brand>
+      <type>
+        electroguitar
+      </type>
+      <ID>
+        3
+      </ID>
+    </essence>
+  </guitar>
+</guitar_shop>
