@@ -41,7 +41,7 @@
         KP-5453
       </name>
       <producer>
-        Poland,FactoryVirginiaBlock890
+        Poland, Factory Virginia Block 890
       </producer>
       <color>
         brown
@@ -50,7 +50,7 @@
         Yamaha
       </brand>
       <type>
-        electroguitar
+        electric guitar
       </type>
       <ID>
         1
@@ -61,7 +61,7 @@
         RR453
       </name>
       <producer>
-        Poland,FactoryVirginiaBlock890
+        Poland, Factory Virginia Block 890
       </producer>
       <color>
         brown
@@ -70,7 +70,7 @@
         Yamaha
       </brand>
       <type>
-        electroguitar
+        electric guitar
       </type>
       <ID>
         2
@@ -81,7 +81,7 @@
         KP45
       </name>
       <producer>
-        Poland,FactoryVirginiaBlock890
+        Poland, Factory Virginia Block 890
       </producer>
       <color>
         brown
@@ -90,7 +90,7 @@
         Yamaha
       </brand>
       <type>
-        electroguitar
+        electric guitar
       </type>
       <ID>
         3
@@ -101,7 +101,7 @@
         RRR5
       </name>
       <producer>
-        Poland,FactoryVirginiaBlock890
+        Poland, Factory Virginia Block 890
       </producer>
       <color>
         white
@@ -110,10 +110,30 @@
         Yamaha
       </brand>
       <type>
-        classicguitar
+        classic guitar
       </type>
       <ID>
         4
+      </ID>
+    </instance>
+    <instance>
+      <name>
+        RRFFF5
+      </name>
+      <producer>
+        Poland, Factory Virginia Block 890
+      </producer>
+      <color>
+        red
+      </color>
+      <brand>
+        Yamaha
+      </brand>
+      <type>
+        classic guitar
+      </type>
+      <ID>
+        5
       </ID>
     </instance>
   </guitars>

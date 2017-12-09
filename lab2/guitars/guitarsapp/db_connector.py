@@ -94,25 +94,49 @@ def clear_database():
     return
 
 
-def get_table_filtered_str(table_name, attribute, str_arg):
+def get_table_filtered_str(table_name, attribute, values):
     con = mdb.connect('localhost', 'root', '', 'guitars')
     with con:
         cur = con.cursor()
-        request = "SELECT * FROM %s WHERE %s IN ('%s')" % (table_name, attribute, str_arg)
-        print(request)
-        cur.execute(request)
-        rows = cur.fetchall()
-        field_names = [i[0] for i in cur.description]
-        return merge_column_names_and_values(rows, field_names)
+        cur.execute("SHOW COLUMNS FROM %s" % table_name)
+        column_names = cur.fetchall()
+        for column_name in column_names:
+            if attribute == column_name[0]:
+                # check if user send string values to int field
+                if column_name[1] == 'int(11)':
+                    for value in values:
+                        if not value.isdigit():
+                            return None
+                # create an sequence like "value1','value2','value3"
+                str_arg = "','".join(values)
+                cur.execute("SELECT * FROM %s WHERE %s IN ('%s')" % (table_name, attribute, str_arg))
+                rows = cur.fetchall()
+                field_names = [i[0] for i in cur.description]
+                return merge_column_names_and_values(rows, field_names)
+    return None
 
 
-def get_table_filtered_number(table_name, attribute, number1, number2):
+def get_table_filtered_number(table_name, attribute, numbers):
     con = mdb.connect('localhost', 'root', '', 'guitars')
     with con:
         cur = con.cursor()
-        request = "SELECT * FROM %s WHERE %s BETWEEN %s AND %s" % (table_name, attribute, number1, number2)
-        print(request)
-        cur.execute(request)
-        rows = cur.fetchall()
-        field_names = [i[0] for i in cur.description]
-        return merge_column_names_and_values(rows, field_names)
+        cur.execute("SHOW COLUMNS FROM %s" % table_name)
+        column_names = cur.fetchall()
+        for column_name in column_names:
+            if attribute == column_name[0] and column_name[1] == 'int(11)':
+                # int this 'try' block we check all of the values if they consist of digits
+                try:
+                    first_number = int(numbers[0])
+                    # in this if-else structure we check how many values was sent in here
+                    if len(numbers) == 1:
+                        second_number = first_number
+                    else:
+                        second_number = int(numbers[1])
+                    cur.execute("SELECT * FROM %s WHERE %s BETWEEN %s AND %s" % (table_name, attribute,
+                                                                                 first_number, second_number))
+                    rows = cur.fetchall()
+                    field_names = [i[0] for i in cur.description]
+                    return merge_column_names_and_values(rows, field_names)
+                except ValueError:
+                    return None
+    return None

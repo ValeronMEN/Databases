@@ -13,7 +13,7 @@ def parse_xml_file():
         for instance in table:
             instances = {}
             for element in instance:
-                instances.update({element.tag: element.text.replace(' ', '').replace('\n', '')})
+                instances.update({element.tag: clip(element.text)})
             tbl.append(instances)
         input_database.update({table.tag: tbl})
     return input_database
@@ -64,3 +64,15 @@ def transport_xml_data():
     input_file.write(transport_data)
     input_file.close()
     return
+
+
+def clip(string):
+    left_n = 0
+    length = len(string)
+    right_n = length
+    for character in range(length):
+        if string[left_n] == ' ' or string[left_n] == '\n':
+            left_n += 1
+        if string[right_n-1] == ' ' or string[right_n-1] == '\n':
+            right_n -= 1
+    return string[left_n:right_n]

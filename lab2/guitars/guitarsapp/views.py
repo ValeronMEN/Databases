@@ -35,40 +35,51 @@ def transput_xml(request):
 
 def guitars(request):
     request_tail = request.GET.urlencode()
+    template = loader.get_template('elements.html')
+    message = 'All elements'
     if request_tail:
-        respond = guitars_filter('guitars', request_tail)
+        respond = elements_filter('guitars', request_tail)
         if respond:
-            template = loader.get_template('guitars.html')
             context = {
-                'guitars': respond
+                'elements': respond,
+                'message': "Filtered elements"
             }
             return HttpResponse(template.render(context, request))
-    template = loader.get_template('guitars.html')
+        message = 'Elements not found'
     context = {
-        'guitars': db_connector.get_table('guitars')
+        'elements': db_connector.get_table('guitars'),
+        'message': message
     }
     return HttpResponse(template.render(context, request))
 
 
 def customers(request):
-    template = loader.get_template('guitars.html')
+    template = loader.get_template('elements.html')
     context = {
-        'guitars': db_connector.get_table('customers')
+        'elements': db_connector.get_table('customers'),
+        'message': 'All elements'
     }
     return HttpResponse(template.render(context, request))
 
 
-def guitars_filter(table_name, request_tail):
+def elements_filter(table_name, request_tail):
+    # in sent URL we have to have as minimal 3 symbols (for example, v=1)
     if len(request_tail) > 3:
         request_body = request_tail.split('=')
+        # without '=' symbol: 3 - 1 = 2
         if len(request_body) == 2:
             attribute = request_body[0]
+            # in this 'try' block we check type of the first value, that was sent
+            # then we choose 'between' for digit values or 'in' for string values
             try:
-                int(request_body[1][0])
                 numbers = request_body[1].split('%3A')
-                if len(numbers) == 2:
-                    return db_connector.get_table_filtered_number(table_name, attribute, numbers[0], numbers[1])
+                int(numbers[0])
+                # in 'between' case we have to define only two numbers (for example, BETWEEN 1 AND 2)
+                if 1 <= len(numbers) <= 2:
+                    return db_connector.get_table_filtered_number(table_name, attribute, numbers)
             except ValueError:
-                values = "','".join(request_body[1].split('%3A'))
-                return db_connector.get_table_filtered_str(table_name, attribute, values)
+                # this is 'in' case
+                return db_connector.get_table_filtered_str(table_name, attribute, request_body[1].split('%3A'))
+            except IndexError:
+                return None
     return None

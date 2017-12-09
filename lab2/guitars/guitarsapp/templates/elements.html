@@ -5,9 +5,10 @@
     <title>Guitars</title>
 </head>
 <body>
+    <h1>{{ message }}</h1>
     <ul>
-        {% for guitar in guitars %}
-        <li>{{ guitar }}</li>
+        {% for element in elements %}
+        <li>{{ element }}</li>
         {% endfor %}
     </ul>
 </body>
