@@ -59,6 +59,8 @@ def customers(request):
         'elements': db_connector.get_table('customers'),
         'message': 'All elements'
     }
+    db_connector.get_table_filtered_text_words('guitars', 'description', ('cool',))
+    db_connector.get_table_filtered_text_phrase('guitars', 'description', 'cool sound')
     return HttpResponse(template.render(context, request))
 
 

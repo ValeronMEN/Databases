@@ -134,9 +134,36 @@ def get_table_filtered_number(table_name, attribute, numbers):
                         second_number = int(numbers[1])
                     cur.execute("SELECT * FROM %s WHERE %s BETWEEN %s AND %s" % (table_name, attribute,
                                                                                  first_number, second_number))
-                    rows = cur.fetchall()
-                    field_names = [i[0] for i in cur.description]
-                    return merge_column_names_and_values(rows, field_names)
+                    return merge_column_names_and_values(cur.fetchall(), [i[0] for i in cur.description])
                 except ValueError:
                     return None
+    return None
+
+
+def get_table_filtered_text_words(table_name, attribute, words_array):
+    con = mdb.connect('localhost', 'root', '', 'guitars')
+    with con:
+        cur = con.cursor()
+        cur.execute("SHOW COLUMNS FROM %s" % table_name)
+        column_names = cur.fetchall()
+        for column_name in column_names:
+            if attribute == column_name[0] and column_name[1] == 'text':
+                query_str = "','+".join(words_array)
+                cur.execute("SELECT * FROM %s WHERE MATCH %s AGAINST ('+%s' IN BOOLEAN MODE)"
+                            % (table_name, attribute, query_str))
+                return merge_column_names_and_values(cur.fetchall(), [i[0] for i in cur.description])
+    return None
+
+
+def get_table_filtered_text_phrase(table_name, attribute, phrase):
+    con = mdb.connect('localhost', 'root', '', 'guitars')
+    with con:
+        cur = con.cursor()
+        cur.execute("SHOW COLUMNS FROM %s" % table_name)
+        column_names = cur.fetchall()
+        for column_name in column_names:
+            if attribute == column_name[0] and column_name[1] == 'text':
+                cur.execute("""SELECT * FROM %s WHERE MATCH %s AGAINST ('"%s"' IN BOOLEAN MODE)"""
+                            % (table_name, attribute, phrase))
+                return merge_column_names_and_values(cur.fetchall(), [i[0] for i in cur.description])
     return None
