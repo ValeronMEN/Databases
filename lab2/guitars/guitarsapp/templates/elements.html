@@ -1,4 +1,5 @@
 {% load static %}
+{% load define_action %}
 <!doctype html>
 <html lang="en">
   <head>
@@ -117,15 +118,42 @@
               <tbody>
               {% for element in elements %}
                 <tr>
-                    {% for obj, val in element.items %}
+                  {% for obj, val in element.items %}
                   {% if val == None %}
                   <td></td>
                   {% else %}
                   <td>{{ val }}</td>
                   {% endif %}
-                    {% endfor %}
+                  {% endfor %}
                 </tr>
               {% endfor %}
+              {% if table_name == 'bills' %}
+              {% for element in elements|slice:":1" %}
+                  <tr>
+                    <form class="mt-2 mt-md-0 left_forms" method="post" action="/add_element/">
+                      {% csrf_token %}
+                    {% for obj in element %}
+                    <td id="tr_id">
+                      {% for obj_add, val_add in add_dict.items %}
+                      {% if obj == obj_add %}
+                      <select name="{{ obj }}" style="width: 100%; padding-top: 0.375rem; padding-right: 0.75rem; padding-bottom: 0.375rem; padding-left: 0.75rem;">
+                        {% for val_add_inst in val_add %}
+                        <option>{{ val_add_inst }}</option>
+                        {% endfor %}
+                      </select>
+                      {% endif %}
+                      {% endfor %}
+                      <!-- I'm sorry, but this rendering so hard -->
+                      {% if obj != 'IDguitar' and obj != 'IDshop' and obj != 'IDcustomer' %}
+                      <input name="{{ obj }}" class="form-control mr-sm-2" type="text" placeholder="Add {{ obj }}">
+                      {% endif %}
+                    </td>
+                    {% endfor %}
+                      <td><button class="btn btn-outline-success" type="submit">Add</button></td>
+                    </form>
+                  </tr>
+              {% endfor %}
+              {% endif %}
               </tbody>
             </table>
           </div>

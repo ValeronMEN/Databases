@@ -9,5 +9,6 @@ urlpatterns = [
     url(r'^output/$', views.output_xml),
     url(r'^input/$', views.input_xml),
     url(r'^transput/$', views.transput_xml),
+    url(r'^add_element/$', views.add_element),
     url(r'^$', views.index, name='index'),
 ]

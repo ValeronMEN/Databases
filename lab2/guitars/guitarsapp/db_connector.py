@@ -25,6 +25,36 @@ def get_table(table_name):
         return merge_column_names_and_values(rows, field_names)
 
 
+def get_values_from_table(table_name, attribute):
+    con = mdb.connect('localhost', 'root', '', 'guitars')
+    with con:
+        cur = con.cursor()
+        cur.execute("SELECT %s FROM %s" % (attribute, table_name))
+        rows = cur.fetchall()
+        rows_shorted = list()
+        for row in rows:
+            rows_shorted.append(row[0])
+        return rows_shorted
+
+
+def insert_bill(input):
+    con = mdb.connect('localhost', 'root', '', 'guitars')
+    with con:
+        cur = con.cursor()
+        cur.execute("INSERT INTO bills(IDguitar, IDshop, IDcustomer, price, purchaseDatetime, ID) "
+                    "VALUES('%s', '%s', '%s', '%s', '%s', '%s')" % (input['IDguitar'], input['IDshop'],
+                                                                    input['IDcustomer'], input['price'],
+                                                                    input['purchaseDatetime'], input['ID']))
+
+
+def get_bills_foreign_key_values():
+    return {
+        'IDguitar': get_values_from_table('guitars', 'ID'),
+        'IDshop': get_values_from_table('shops', 'ID'),
+        'IDcustomer': get_values_from_table('customers', 'ID'),
+    }
+
+
 def get_text_column_names(table_name):
     con = mdb.connect('localhost', 'root', '', 'guitars')
     with con:

@@ -56,6 +56,86 @@
         1
       </ID>
     </instance>
+    <instance>
+      <price>
+        134
+      </price>
+      <IDcustomer>
+        1
+      </IDcustomer>
+      <IDguitar>
+        1
+      </IDguitar>
+      <purchaseDatetime>
+        2017-12-11 12:33:51
+      </purchaseDatetime>
+      <IDshop>
+        1
+      </IDshop>
+      <ID>
+        4
+      </ID>
+    </instance>
+    <instance>
+      <price>
+        124124
+      </price>
+      <IDcustomer>
+        1
+      </IDcustomer>
+      <IDguitar>
+        1
+      </IDguitar>
+      <purchaseDatetime>
+        2017-12-11 13:02:51
+      </purchaseDatetime>
+      <IDshop>
+        1
+      </IDshop>
+      <ID>
+        5
+      </ID>
+    </instance>
+    <instance>
+      <price>
+        333333
+      </price>
+      <IDcustomer>
+        1
+      </IDcustomer>
+      <IDguitar>
+        1
+      </IDguitar>
+      <purchaseDatetime>
+        1998-09-09 00:00:00
+      </purchaseDatetime>
+      <IDshop>
+        1
+      </IDshop>
+      <ID>
+        6
+      </ID>
+    </instance>
+    <instance>
+      <price>
+        234324
+      </price>
+      <IDcustomer>
+        2
+      </IDcustomer>
+      <IDguitar>
+        4
+      </IDguitar>
+      <purchaseDatetime>
+        2017-12-11 13:16:20
+      </purchaseDatetime>
+      <IDshop>
+        1
+      </IDshop>
+      <ID>
+        7
+      </ID>
+    </instance>
   </bills>
   <shops>
     <instance>

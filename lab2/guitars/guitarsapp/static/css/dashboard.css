@@ -8,6 +8,10 @@ h1 {
   border-bottom: 1px solid #eee;
 }
 
+tr#tr_id {
+    bgcolor="#ffc107";
+}
+
 .sidebar {
   position: fixed;
   top: 51px;
@@ -51,5 +55,10 @@ h1 {
  }
 
 .form-div input {
-margin-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.form-div p {
+     margin-left: 0.3rem;
+     margin-top: 0.4rem;
 }

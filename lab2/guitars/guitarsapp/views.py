@@ -6,6 +6,9 @@ from django.shortcuts import render
 from . import db_connector
 from . import xml_handler
 import urllib
+import datetime
+from django.shortcuts import redirect
+from django.utils.datastructures import MultiValueDictKeyError
 
 
 def index(request):
@@ -49,6 +52,9 @@ def bills(request):
 
 
 def elements(request, table_name):
+    bills_enum = dict()
+    if table_name == 'bills':
+        bills_enum = db_connector.get_bills_foreign_key_values()
     template = loader.get_template('elements.html')
     if request.method == 'GET':
         request_tail = request.GET.urlencode()
@@ -67,6 +73,7 @@ def elements(request, table_name):
             'elements': db_connector.get_table(table_name),
             'message': message,
             'table_name': table_name,
+            'add_dict': bills_enum,
         }
         return HttpResponse(template.render(context, request))
     elif request.method == 'POST':
@@ -93,8 +100,39 @@ def elements(request, table_name):
             'elements': db_connector.get_table(table_name),
             'message': 'Elements not found',
             'table_name': table_name,
+            'add_dict': bills_enum,
         }
         return HttpResponse(template.render(context, request))
+
+
+def add_element(request):
+    if request.method == 'POST':
+        print(request.POST)
+        try:
+            bill_request = {
+                'IDguitar': request.POST['IDguitar'],
+                'IDshop': request.POST['IDshop'],
+                'IDcustomer': request.POST['IDcustomer'],
+                'price': request.POST['price'],
+                'ID': request.POST['ID'],
+                'purchaseDatetime': request.POST['purchaseDatetime']
+            }
+        except MultiValueDictKeyError:
+            return redirect('/bills')
+        try:
+            if bill_request['ID'] != '':
+                int(bill_request['ID'])
+            if bill_request['purchaseDatetime'] == '':
+                bill_request['purchaseDatetime'] = datetime.datetime.now()
+            else:
+                datetime.datetime.strptime(bill_request['purchaseDatetime'], '%Y-%m-%d')
+            if int(bill_request['price']) >= 0 and int(bill_request['IDguitar']) >= 0 and int(
+                    bill_request['IDshop']) >= 0 \
+                    and int(bill_request['IDcustomer']) >= 0:
+                db_connector.insert_bill(bill_request)
+        except ValueError:
+            print('ValueError')
+    return redirect('/bills')
 
 
 def elements_filter(table_name, request_tail):
