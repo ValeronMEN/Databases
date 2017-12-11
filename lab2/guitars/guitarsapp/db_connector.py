@@ -25,6 +25,16 @@ def get_table(table_name):
         return merge_column_names_and_values(rows, field_names)
 
 
+def get_text_column_names(table_name):
+    con = mdb.connect('localhost', 'root', '', 'guitars')
+    with con:
+        cur = con.cursor()
+        cur.execute("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '%s' AND DATA_TYPE = 'TEXT'"
+                    % table_name)
+        rows = cur.fetchall()
+        return rows[0]
+
+
 def get_database():
     con = mdb.connect('localhost', 'root', '', 'guitars')
     with con:
@@ -148,9 +158,11 @@ def get_table_filtered_text_words(table_name, attribute, words_array):
         column_names = cur.fetchall()
         for column_name in column_names:
             if attribute == column_name[0] and column_name[1] == 'text':
-                query_str = "','+".join(words_array)
-                cur.execute("SELECT * FROM %s WHERE MATCH %s AGAINST ('+%s' IN BOOLEAN MODE)"
-                            % (table_name, attribute, query_str))
+                query_str = " +".join(words_array)
+                request = """SELECT * FROM %s WHERE MATCH %s AGAINST ('+%s' IN BOOLEAN MODE)""" \
+                          % (table_name, attribute, query_str)
+                print(request)
+                cur.execute(request)
                 return merge_column_names_and_values(cur.fetchall(), [i[0] for i in cur.description])
     return None
 

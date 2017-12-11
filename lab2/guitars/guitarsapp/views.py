@@ -5,13 +5,12 @@ from django.template import loader
 from django.shortcuts import render
 from . import db_connector
 from . import xml_handler
-
-# return HttpResponse("<h1>Hell yeah</h1>")
-# return render(request, 'index.html', {})
+import urllib
 
 
 def index(request):
     template = loader.get_template('index.html')
+    # return render(request, 'index.html', {})
     return HttpResponse(template.render({}, request))
 
 
@@ -34,37 +33,72 @@ def transput_xml(request):
 
 
 def guitars(request):
-    request_tail = request.GET.urlencode()
-    template = loader.get_template('elements.html')
-    message = 'All elements'
-    if request_tail:
-        respond = elements_filter('guitars', request_tail)
-        if respond:
-            context = {
-                'elements': respond,
-                'message': "Filtered elements"
-            }
-            return HttpResponse(template.render(context, request))
-        message = 'Elements not found'
-    context = {
-        'elements': db_connector.get_table('guitars'),
-        'message': message
-    }
-    return HttpResponse(template.render(context, request))
+    return elements(request, 'guitars')
 
 
 def customers(request):
+    return elements(request, 'customers')
+
+
+def shops(request):
+    return elements(request, 'shops')
+
+
+def bills(request):
+    return elements(request, 'bills')
+
+
+def elements(request, table_name):
     template = loader.get_template('elements.html')
-    context = {
-        'elements': db_connector.get_table('customers'),
-        'message': 'All elements'
-    }
-    db_connector.get_table_filtered_text_words('guitars', 'description', ('cool',))
-    db_connector.get_table_filtered_text_phrase('guitars', 'description', 'cool sound')
-    return HttpResponse(template.render(context, request))
+    if request.method == 'GET':
+        request_tail = request.GET.urlencode()
+        message = 'All elements'
+        if request_tail:
+            respond = elements_filter(table_name, request_tail)
+            if respond:
+                context = {
+                    'elements': respond,
+                    'message': "Simple filtration results",
+                    'table_name': table_name,
+                }
+                return HttpResponse(template.render(context, request))
+            message = 'Elements not found'
+        context = {
+            'elements': db_connector.get_table(table_name),
+            'message': message,
+            'table_name': table_name,
+        }
+        return HttpResponse(template.render(context, request))
+    elif request.method == 'POST':
+        attr_t = request.POST['attr_t']
+        attr_w = request.POST['attr_w']
+        text = request.POST['text']
+        words = request.POST['words']
+        print(words)
+        text_columns_array = db_connector.get_text_column_names(table_name)
+        result = []
+        for column_name in text_columns_array:
+            if attr_w == column_name and words != '':
+                result = db_connector.get_table_filtered_text_words(table_name, attr_w, words.split(' '))
+            elif attr_t == column_name and text != '':
+                result = db_connector.get_table_filtered_text_phrase(table_name, attr_t, text)
+            if len(result) != 0:
+                context = {
+                    'elements': result,
+                    'message': 'Boolean mode filtration results',
+                    'table_name': table_name,
+                }
+                return HttpResponse(template.render(context, request))
+        context = {
+            'elements': db_connector.get_table(table_name),
+            'message': 'Elements not found',
+            'table_name': table_name,
+        }
+        return HttpResponse(template.render(context, request))
 
 
 def elements_filter(table_name, request_tail):
+    request_tail = urllib.unquote(request_tail).replace('+', ' ')
     # in sent URL we have to have as minimal 3 symbols (for example, v=1)
     if len(request_tail) > 3:
         request_body = request_tail.split('=')

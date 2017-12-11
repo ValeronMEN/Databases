@@ -1,15 +1,147 @@
-<!DOCTYPE html>
+{% load static %}
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Guitars</title>
-</head>
-<body>
-    <h1>{{ message }}</h1>
-    <ul>
-        {% for element in elements %}
-        <li>{{ element }}</li>
-        {% endfor %}
-    </ul>
-</body>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="{% static 'bootstrap/favicon.ico' %}">
+
+    <title>Guitar Shop</title>
+
+    <link href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
+  </head>
+
+  <body>
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-success">
+        <a class="navbar-brand" href="../">Guitar Shop</a>
+        <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/">Home</a>
+            </li>
+              {% if table_name == 'guitars' %}
+            <li class="nav-item active">
+              {% else %}
+            <li class="nav-item">
+             {% endif %}
+              <a class="nav-link" href="/guitars">Guitars</a>
+            </li>
+              {% if table_name == 'shops' %}
+            <li class="nav-item active">
+              {% else %}
+            <li class="nav-item">
+             {% endif %}
+              <a class="nav-link" href="/shops">Shops</a>
+            </li>
+              {% if table_name == 'customers' %}
+            <li class="nav-item active">
+              {% else %}
+            <li class="nav-item">
+             {% endif %}
+              <a class="nav-link" href="/customers">Customers</a>
+            </li>
+              {% if table_name == 'bills' %}
+            <li class="nav-item active">
+              {% else %}
+            <li class="nav-item">
+             {% endif %}
+              <a class="nav-link" href="/bills">Bills</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </header>
+
+    <div class="container-fluid">
+      <div class="row">
+        <nav class="col-sm-3 col-md-2 d-none d-sm-block bg-light sidebar">
+          <form class=" mt-2 mt-md-0 left_forms" method="get">
+            <div class="form-div">
+            <p>Search by text enumerations:</p>
+            <input class="form-control mr-sm-2" type="text" placeholder="attribute" id="enum_attr">
+            <input class="form-control mr-sm-2" type="text" placeholder="text1:text2:text3" aria-label="Search" id="enum_vals">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit" onclick="enumFunc('enum_attr', 'enum_vals')">Search</button>
+            </div>
+          </form>
+          <form class="mt-2 mt-md-0 left_forms" method="get">
+            <div class="form-div">
+            <p>Search by line segment (for example, from 1 to 2):</p>
+            <input class="form-control mr-sm-2" type="text" placeholder="attribute" id="nums_attr">
+            <input class="form-control mr-sm-2" type="text" placeholder="1:2" aria-label="Search" id="nums_vals">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit" onclick="enumFunc('nums_attr', 'nums_vals')">Search</button>
+               </div>
+          </form>
+          <form class="mt-2 mt-md-0 left_forms" method="post" action="">
+            {% csrf_token %}
+            <div class="form-div">
+            <p>Search words in boolean mode:</p>
+            <input name="attr_w" class="form-control mr-sm-2" type="text" placeholder="attribute">
+            <input name='words' class="form-control mr-sm-2" type="text" placeholder="text1 text2 text3" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+               </div>
+            <div class="form-div">
+            <p>Search text in boolean mode:</p>
+            <input name="attr_t" class="form-control mr-sm-2" type="text" placeholder="attribute">
+            <input name='text' class="form-control mr-sm-2" type="text" placeholder="some text" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+               </div>
+          </form>
+        </nav>
+
+        <main role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3">
+          <h2>Section: {{ table_name.upper }}</h2>
+          {% if message == 'Elements not found' %}
+          <p style="color: red;">{{ message }}</p>
+          {% else %}
+          <p>{{ message }}</p>
+          {% endif %}
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+              {% for element in elements|slice:":1" %}
+                <tr>
+                    {% for obj in element %}
+                  <th>{{ obj }}</th>
+                    {% endfor %}
+                </tr>
+              {% endfor %}
+              </thead>
+              <tbody>
+              {% for element in elements %}
+                <tr>
+                    {% for obj, val in element.items %}
+                  {% if val == None %}
+                  <td></td>
+                  {% else %}
+                  <td>{{ val }}</td>
+                  {% endif %}
+                    {% endfor %}
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="../../../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="{% static 'bootstrap/assets/js/vendor/popper.min.js' %}"></script>
+    <script src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script>
+    <script>
+        function enumFunc(attr, vals){
+           document.getElementById(vals).name = document.getElementById(attr).value;
+        }
+    </script>
+
+  </body>
 </html>
