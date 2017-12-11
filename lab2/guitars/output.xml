@@ -35,6 +35,54 @@
       </firstname>
     </instance>
   </customers>
+  <bills>
+    <instance>
+      <price>
+        139
+      </price>
+      <IDcustomer>
+        2
+      </IDcustomer>
+      <IDguitar>
+        2
+      </IDguitar>
+      <purchaseDatetime>
+        2017-12-11 00:13:20
+      </purchaseDatetime>
+      <IDshop>
+        2
+      </IDshop>
+      <ID>
+        1
+      </ID>
+    </instance>
+  </bills>
+  <shops>
+    <instance>
+      <description/>
+      <type>
+        general store
+      </type>
+      <ID>
+        1
+      </ID>
+      <name>
+        Petroguitars
+      </name>
+    </instance>
+    <instance>
+      <description/>
+      <type>
+        department store
+      </type>
+      <ID>
+        2
+      </ID>
+      <name>
+        Superinstruments
+      </name>
+    </instance>
+  </shops>
   <guitars>
     <instance>
       <name>
@@ -55,6 +103,7 @@
       <ID>
         1
       </ID>
+      <description/>
     </instance>
     <instance>
       <name>
@@ -75,6 +124,7 @@
       <ID>
         2
       </ID>
+      <description/>
     </instance>
     <instance>
       <name>
@@ -95,6 +145,7 @@
       <ID>
         3
       </ID>
+      <description/>
     </instance>
     <instance>
       <name>
@@ -115,6 +166,7 @@
       <ID>
         4
       </ID>
+      <description/>
     </instance>
     <instance>
       <name>
@@ -135,6 +187,53 @@
       <ID>
         5
       </ID>
+      <description/>
+    </instance>
+    <instance>
+      <name>
+        A5
+      </name>
+      <producer>
+        Poland, Factory Virginia Block 890
+      </producer>
+      <color>
+        blue
+      </color>
+      <brand>
+        Yamaha
+      </brand>
+      <type>
+        classic guitar
+      </type>
+      <ID>
+        6
+      </ID>
+      <description>
+        cool guitar
+      </description>
+    </instance>
+    <instance>
+      <name>
+        B6
+      </name>
+      <producer>
+        Poland, Factory Virginia Block 890
+      </producer>
+      <color>
+        blue
+      </color>
+      <brand>
+        Yamaha
+      </brand>
+      <type>
+        classic guitar
+      </type>
+      <ID>
+        7
+      </ID>
+      <description>
+        cool sound
+      </description>
     </instance>
   </guitars>
 </guitar_shop>

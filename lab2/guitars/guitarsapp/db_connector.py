@@ -82,6 +82,7 @@ def insert_all_tables(input_database):
         cur = con.cursor()
         for name, table in input_database.items():
             insert_table(table, name)
+    create_bills_constraints()
     return
 
 
@@ -94,6 +95,9 @@ def clear_table(table_name):
 
 
 def clear_database():
+    # I was so tired to make it for general case
+    clear_bills_constraints()
+    # continue
     con = mdb.connect('localhost', 'root', '', 'guitars')
     with con:
         cur = con.cursor()
@@ -102,6 +106,48 @@ def clear_database():
         for row in rows:
             clear_table(row[0])
     return
+
+
+def clear_bills_constraints():
+    con = mdb.connect('localhost', 'root', '', 'guitars')
+    with con:
+        cur = con.cursor()
+        # cur.execute("SET foreign_key_checks = 0")
+        cur.execute("ALTER TABLE bills DROP FOREIGN KEY bills_ibfk_3")
+        cur.execute("ALTER TABLE bills DROP FOREIGN KEY bills_ibfk_2")
+        cur.execute("ALTER TABLE bills DROP FOREIGN KEY bills_ibfk_1")
+
+
+def create_bills_constraints():
+    con = mdb.connect('localhost', 'root', '', 'guitars')
+    with con:
+        cur = con.cursor()
+        # cur.execute("SET foreign_key_checks = 1")
+        cur.execute("ALTER TABLE bills ADD FOREIGN KEY (IDguitar) REFERENCES guitars(ID)")
+        cur.execute("ALTER TABLE bills ADD FOREIGN KEY (IDcustomer) REFERENCES customers(ID)")
+        cur.execute("ALTER TABLE bills ADD FOREIGN KEY (IDshop) REFERENCES shops(ID)")
+
+
+def get_all_foreign_keys():
+    fk_req = "SELECT RC.CONSTRAINT_NAME FK_Name, KF.TABLE_SCHEMA FK_Schema, KF.TABLE_NAME FK_Table, " \
+             "KF.COLUMN_NAME FK_Column, RC.UNIQUE_CONSTRAINT_NAME PK_Name, KP.TABLE_SCHEMA PK_Schema, " \
+             "KP.TABLE_NAME PK_Table, KP.COLUMN_NAME PK_Column, RC.MATCH_OPTION MatchOption, " \
+             "RC.UPDATE_RULE UpdateRule, RC.DELETE_RULE DeleteRule " \
+             "FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS RC " \
+             "JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE KF ON RC.CONSTRAINT_NAME = KF.CONSTRAINT_NAME " \
+             "JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE KP ON RC.UNIQUE_CONSTRAINT_NAME = KP.CONSTRAINT_NAME"
+    con = mdb.connect('localhost', 'root', '', 'guitars')
+    with con:
+        cur = con.cursor()
+        cur.execute(fk_req)
+        rows = cur.fetchall()
+        todelete = list()
+        todelete.append(rows[0][2])
+        for row in rows:
+            for contained in todelete:
+                if contained != row[2]:
+                    todelete.append(row[2])
+        return todelete
 
 
 def get_table_filtered_str(table_name, attribute, values):

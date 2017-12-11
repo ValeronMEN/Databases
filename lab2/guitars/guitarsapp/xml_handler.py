@@ -2,6 +2,7 @@ import xml.etree.cElementTree as et
 from xml.dom import minidom
 from xml.etree import ElementTree
 from xml.etree.ElementTree import Element, SubElement
+import datetime
 
 
 def parse_xml_file():
@@ -13,7 +14,11 @@ def parse_xml_file():
         for instance in table:
             instances = {}
             for element in instance:
-                instances.update({element.tag: clip(element.text)})
+                if element.text:
+                    text = clip(element.text)
+                else:
+                    text = ''
+                instances.update({element.tag: text})
             tbl.append(instances)
         input_database.update({table.tag: tbl})
     return input_database
@@ -44,6 +49,8 @@ def create_xml_template(input_database):
             for title, value in instance.items():
                 element = SubElement(guitar, title)
                 if type(value).__name__ == "long":
+                    value = str(value)
+                if type(value).__name__ == "datetime":
                     value = str(value)
                 element.text = value
     return prettify(top)
