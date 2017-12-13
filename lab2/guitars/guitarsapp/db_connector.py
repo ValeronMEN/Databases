@@ -16,6 +16,8 @@ def merge_column_names_and_values(rows, field_names):
 
 
 def get_table(table_name):
+    if table_name == 'bills':
+        return get_table_bills()
     con = mdb.connect('localhost', 'root', '', 'guitars')
     with con:
         cur = con.cursor()
@@ -23,6 +25,28 @@ def get_table(table_name):
         rows = cur.fetchall()
         field_names = [i[0] for i in cur.description]
         return merge_column_names_and_values(rows, field_names)
+
+
+def get_table_bills():
+    con = mdb.connect('localhost', 'root', '', 'guitars')
+    with con:
+        cur = con.cursor()
+        cur.execute("SELECT * FROM bills LEFT OUTER JOIN guitars ON bills.IDguitar=guitars.ID "
+                    "LEFT OUTER JOIN customers ON bills.IDcustomer = customers.ID "
+                    "LEFT OUTER JOIN shops ON bills.IDshop = shops.ID")
+        # In here we redefine ID field several times due to some ID fields in our SELECT respond
+        bills_with_problem_id = merge_column_names_and_values(cur.fetchall(), [i[0] for i in cur.description])
+        cur.execute("SELECT ID FROM bills")
+        rows = cur.fetchall()
+        # Then we get ID field from the original bills table and redefine it again
+        i = 0
+        for pair in bills_with_problem_id:
+            pair.update({
+                'ID': rows[i][0],
+            })
+            i += 1
+        # Here we have proper ID fields
+        return bills_with_problem_id
 
 
 def get_values_from_table(table_name, attribute):
@@ -62,6 +86,8 @@ def get_text_column_names(table_name):
         cur.execute("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '%s' AND DATA_TYPE = 'TEXT'"
                     % table_name)
         rows = cur.fetchall()
+        if len(rows) == 0:
+            return tuple()
         return rows[0]
 
 

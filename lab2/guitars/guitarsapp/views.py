@@ -13,7 +13,6 @@ from django.utils.datastructures import MultiValueDictKeyError
 
 def index(request):
     template = loader.get_template('index.html')
-    # return render(request, 'index.html', {})
     return HttpResponse(template.render({}, request))
 
 
@@ -52,20 +51,21 @@ def bills(request):
 
 
 def elements(request, table_name):
-    bills_enum = dict()
+    dropdown_values = dict()
     if table_name == 'bills':
-        bills_enum = db_connector.get_bills_foreign_key_values()
+        dropdown_values = db_connector.get_bills_foreign_key_values()
     template = loader.get_template('elements.html')
     if request.method == 'GET':
         request_tail = request.GET.urlencode()
         message = 'All elements'
         if request_tail:
-            respond = elements_filter(table_name, request_tail)
+            respond = elements_filter_get(table_name, request_tail)
             if respond:
                 context = {
                     'elements': respond,
                     'message': "Simple filtration results",
                     'table_name': table_name,
+                    'dropdown_values': dropdown_values,
                 }
                 return HttpResponse(template.render(context, request))
             message = 'Elements not found'
@@ -73,41 +73,15 @@ def elements(request, table_name):
             'elements': db_connector.get_table(table_name),
             'message': message,
             'table_name': table_name,
-            'add_dict': bills_enum,
+            'dropdown_values': dropdown_values,
         }
         return HttpResponse(template.render(context, request))
     elif request.method == 'POST':
-        attr_t = request.POST['attr_t']
-        attr_w = request.POST['attr_w']
-        text = request.POST['text']
-        words = request.POST['words']
-        print(words)
-        text_columns_array = db_connector.get_text_column_names(table_name)
-        result = []
-        for column_name in text_columns_array:
-            if attr_w == column_name and words != '':
-                result = db_connector.get_table_filtered_text_words(table_name, attr_w, words.split(' '))
-            elif attr_t == column_name and text != '':
-                result = db_connector.get_table_filtered_text_phrase(table_name, attr_t, text)
-            if len(result) != 0:
-                context = {
-                    'elements': result,
-                    'message': 'Boolean mode filtration results',
-                    'table_name': table_name,
-                }
-                return HttpResponse(template.render(context, request))
-        context = {
-            'elements': db_connector.get_table(table_name),
-            'message': 'Elements not found',
-            'table_name': table_name,
-            'add_dict': bills_enum,
-        }
-        return HttpResponse(template.render(context, request))
+        return elements_filter_post(request, table_name, template, dropdown_values)
 
 
-def add_element(request):
+def add_bill(request):
     if request.method == 'POST':
-        print(request.POST)
         try:
             bill_request = {
                 'IDguitar': request.POST['IDguitar'],
@@ -121,7 +95,11 @@ def add_element(request):
             return redirect('/bills')
         try:
             if bill_request['ID'] != '':
-                int(bill_request['ID'])
+                user_bill_id = int(bill_request['ID'])
+                existed_bill_ids = db_connector.get_values_from_table('bills', 'ID')
+                for existed_bill_id in existed_bill_ids:
+                    if existed_bill_id == user_bill_id:
+                        return redirect('/bills')
             if bill_request['purchaseDatetime'] == '':
                 bill_request['purchaseDatetime'] = datetime.datetime.now()
             else:
@@ -135,7 +113,7 @@ def add_element(request):
     return redirect('/bills')
 
 
-def elements_filter(table_name, request_tail):
+def elements_filter_get(table_name, request_tail):
     request_tail = urllib.unquote(request_tail).replace('+', ' ')
     # in sent URL we have to have as minimal 3 symbols (for example, v=1)
     if len(request_tail) > 3:
@@ -157,3 +135,34 @@ def elements_filter(table_name, request_tail):
             except IndexError:
                 return None
     return None
+
+
+def elements_filter_post(request, table_name, template, dropdown_values):
+    attr_t = request.POST['attr_t']
+    attr_w = request.POST['attr_w']
+    text = request.POST['text']
+    words = request.POST['words']
+    print(words)
+    text_columns_array = db_connector.get_text_column_names(table_name)
+    if len(text_columns_array) != 0:
+        result = []
+        for column_name in text_columns_array:
+            if attr_w == column_name and words != '':
+                result = db_connector.get_table_filtered_text_words(table_name, attr_w, words.split(' '))
+            elif attr_t == column_name and text != '':
+                result = db_connector.get_table_filtered_text_phrase(table_name, attr_t, text)
+            if len(result) != 0:
+                context = {
+                    'elements': result,
+                    'message': 'Boolean mode filtration results',
+                    'table_name': table_name,
+                    'dropdown_values': dropdown_values,
+                }
+                return HttpResponse(template.render(context, request))
+    context = {
+        'elements': db_connector.get_table(table_name),
+        'message': 'Elements not found',
+        'table_name': table_name,
+        'dropdown_values': dropdown_values,
+    }
+    return HttpResponse(template.render(context, request))
