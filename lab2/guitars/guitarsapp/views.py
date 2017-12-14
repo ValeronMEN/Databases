@@ -70,7 +70,7 @@ def elements(request, table_name):
                 return HttpResponse(template.render(context, request))
             message = 'Elements not found'
         context = {
-            'elements': db_connector.get_table(table_name),
+            'elements': db_connector.get_table_to_display(table_name),
             'message': message,
             'table_name': table_name,
             'dropdown_values': dropdown_values,
@@ -84,30 +84,35 @@ def add_bill(request):
     if request.method == 'POST':
         try:
             bill_request = {
-                'IDguitar': request.POST['IDguitar'],
-                'IDshop': request.POST['IDshop'],
-                'IDcustomer': request.POST['IDcustomer'],
+                'bill_guitar_id': request.POST['bill_guitar_id'],
+                'bill_shop_id': request.POST['bill_shop_id'],
+                'bill_customer_id': request.POST['bill_customer_id'],
                 'price': request.POST['price'],
-                'ID': request.POST['ID'],
-                'purchaseDatetime': request.POST['purchaseDatetime']
+                'bill_id': request.POST['bill_id'],
+                'purchase_datetime': request.POST['purchase_datetime']
             }
         except MultiValueDictKeyError:
             return redirect('/bills')
         try:
-            if bill_request['ID'] != '':
-                user_bill_id = int(bill_request['ID'])
-                existed_bill_ids = db_connector.get_values_from_table('bills', 'ID')
+            method = 'add'
+            if bill_request['bill_id'] != '':
+                user_bill_id = int(bill_request['bill_id'])
+                existed_bill_ids = db_connector.get_values_from_table('bills', 'bill_id')
                 for existed_bill_id in existed_bill_ids:
                     if existed_bill_id == user_bill_id:
-                        return redirect('/bills')
-            if bill_request['purchaseDatetime'] == '':
-                bill_request['purchaseDatetime'] = datetime.datetime.now()
+                        method = 'update'
+                        break
+            if bill_request['purchase_datetime'] == '':
+                bill_request['purchase_datetime'] = datetime.datetime.now()
             else:
-                datetime.datetime.strptime(bill_request['purchaseDatetime'], '%Y-%m-%d')
-            if int(bill_request['price']) >= 0 and int(bill_request['IDguitar']) >= 0 and int(
-                    bill_request['IDshop']) >= 0 \
-                    and int(bill_request['IDcustomer']) >= 0:
-                db_connector.insert_bill(bill_request)
+                datetime.datetime.strptime(bill_request['purchase_datetime'], '%Y-%m-%d')
+            if int(bill_request['price']) >= 0 and int(bill_request['bill_guitar_id']) >= 0 and int(
+                    bill_request['bill_shop_id']) >= 0 \
+                    and int(bill_request['bill_customer_id']) >= 0:
+                if method == 'add':
+                    db_connector.insert_bill(bill_request)
+                elif method == 'update':
+                    db_connector.update_bill(bill_request)
         except ValueError:
             print('ValueError')
     return redirect('/bills')
@@ -142,7 +147,6 @@ def elements_filter_post(request, table_name, template, dropdown_values):
     attr_w = request.POST['attr_w']
     text = request.POST['text']
     words = request.POST['words']
-    print(words)
     text_columns_array = db_connector.get_text_column_names(table_name)
     if len(text_columns_array) != 0:
         result = []
@@ -160,9 +164,22 @@ def elements_filter_post(request, table_name, template, dropdown_values):
                 }
                 return HttpResponse(template.render(context, request))
     context = {
-        'elements': db_connector.get_table(table_name),
+        'elements': db_connector.get_table_to_display(table_name),
         'message': 'Elements not found',
         'table_name': table_name,
         'dropdown_values': dropdown_values,
     }
     return HttpResponse(template.render(context, request))
+
+
+def delete_bill(request):
+    if request.method == 'POST':
+        request_tail = request.path.split('/')
+        try:
+            table_name = request_tail[2]
+            element_id = request_tail[3]
+            db_connector.delete_record(table_name, 'bill_id', int(element_id))
+        except IndexError:
+            return HttpResponse('<h1>INDEX ERROR</h1>')
+        return redirect('/%s' % request_tail[2])
+    return HttpResponse('<h1>You need to use POST request in here</h1>')

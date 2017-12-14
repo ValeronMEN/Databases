@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="{% static 'bootstrap/favicon.ico' %}">
+    <link rel="icon" href="{% static 'favicon.ico' %}">
 
     <title>Guitar Shop</title>
 
@@ -112,6 +112,9 @@
                     {% for obj in element %}
                   <th>{{ obj }}</th>
                     {% endfor %}
+                  {% if table_name == 'bills' %}
+                  <th>action</th>
+                  {% endif %}
                 </tr>
               {% endfor %}
               </thead>
@@ -119,19 +122,26 @@
               {% for element in elements %}
                 <tr>
                   {% for obj, val in element.items %}
-                  {% if val == None %}
-                  <td></td>
-                  {% else %}
-                  {% if obj == 'ID' %}
-                  <td style="background: MediumSpringGreen; color: black;">{{ val }}</td>
-                  <!-- I'm sorry, but this rendering so hard -->
-                  {% elif obj == 'IDguitar' or obj == 'IDshop' or obj == 'IDcustomer' or obj == 'price' or obj == 'purchaseDatetime' %}
-                  <td style="background: PaleGreen; color: black;">{{ val }}</td>
-                  {% else %}
-                  <td>{{ val }}</td>
-                  {% endif %}
-                  {% endif %}
+                      {% if val == None %}
+                      <td></td>
+                      {% else %}
+                          {% if obj == 'bill_id' or obj == 'guitar_id' or obj == 'shop_id' or obj == 'customer_id'%}
+                          <td style="background: MediumSpringGreen; color: black;">{{ val }}</td>
+                          {% elif obj == 'bill_guitar_id' or obj == 'bill_shop_id' or obj == 'bill_customer_id' or obj == 'price' or obj == 'purchase_datetime' %}
+                          <td style="background: PaleGreen; color: black;">{{ val }}</td>
+                          {% else %}
+                          <td>{{ val }}</td>
+                          {% endif %}
+                      {% endif %}
                   {% endfor %}
+                  {% if table_name == 'bills' %}
+                  <td>
+                    <form class="mt-2 mt-md-0 left_forms" method="post" action="/delete_element/{{ table_name }}/{{ element.bill_id }}">
+                      {% csrf_token %}
+                      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">X</button>
+                    </form>
+                  </td>
+                  {% endif %}
                 </tr>
               {% endfor %}
               {% if table_name == 'bills' %}
@@ -151,7 +161,7 @@
                       {% endif %}
                       {% endfor %}
                       <!-- I'm sorry, but this rendering so hard -->
-                      {% if obj == 'price' or obj == 'ID' or obj == 'purchaseDatetime' %}
+                      {% if obj == 'price' or obj == 'bill_id' or obj == 'purchase_datetime' %}
                       <input name="{{ obj }}" class="form-control mr-sm-2" type="text" placeholder="{{ obj }}">
                       {% endif %}
                     </td>

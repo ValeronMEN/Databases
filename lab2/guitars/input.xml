@@ -2,37 +2,37 @@
 <guitar_shop>
   <customers>
     <instance>
-      <lastname>
+      <last_name>
         Boliliy
-      </lastname>
-      <ID>
-        1
-      </ID>
-      <firstname>
+      </last_name>
+      <first_name>
         Dimka
-      </firstname>
+      </first_name>
+      <customer_id>
+        1
+      </customer_id>
     </instance>
     <instance>
-      <lastname>
+      <last_name>
         Behavandi
-      </lastname>
-      <ID>
-        2
-      </ID>
-      <firstname>
+      </last_name>
+      <first_name>
         Behrang
-      </firstname>
+      </first_name>
+      <customer_id>
+        2
+      </customer_id>
     </instance>
     <instance>
-      <lastname>
+      <last_name>
         Petrov
-      </lastname>
-      <ID>
-        3
-      </ID>
-      <firstname>
+      </last_name>
+      <first_name>
         Misha
-      </firstname>
+      </first_name>
+      <customer_id>
+        3
+      </customer_id>
     </instance>
   </customers>
   <bills>
@@ -40,127 +40,107 @@
       <price>
         139
       </price>
-      <IDcustomer>
+      <bill_id>
+        1
+      </bill_id>
+      <bill_customer_id>
         2
-      </IDcustomer>
-      <IDguitar>
-        2
-      </IDguitar>
-      <purchaseDatetime>
+      </bill_customer_id>
+      <purchase_datetime>
         2017-12-11 00:13:20
-      </purchaseDatetime>
-      <IDshop>
+      </purchase_datetime>
+      <bill_guitar_id>
         2
-      </IDshop>
-      <ID>
-        1
-      </ID>
+      </bill_guitar_id>
+      <bill_shop_id>
+        2
+      </bill_shop_id>
     </instance>
     <instance>
       <price>
-        134
+        1234
       </price>
-      <IDcustomer>
-        1
-      </IDcustomer>
-      <IDguitar>
-        1
-      </IDguitar>
-      <purchaseDatetime>
-        2017-12-11 12:33:51
-      </purchaseDatetime>
-      <IDshop>
-        1
-      </IDshop>
-      <ID>
-        4
-      </ID>
-    </instance>
-    <instance>
-      <price>
-        124124
-      </price>
-      <IDcustomer>
-        1
-      </IDcustomer>
-      <IDguitar>
-        1
-      </IDguitar>
-      <purchaseDatetime>
-        2017-12-11 13:02:51
-      </purchaseDatetime>
-      <IDshop>
-        1
-      </IDshop>
-      <ID>
+      <bill_id>
+        2
+      </bill_id>
+      <bill_customer_id>
+        3
+      </bill_customer_id>
+      <purchase_datetime>
+        2017-12-14 20:29:56
+      </purchase_datetime>
+      <bill_guitar_id>
         5
-      </ID>
+      </bill_guitar_id>
+      <bill_shop_id>
+        1
+      </bill_shop_id>
     </instance>
     <instance>
       <price>
-        333333
+        21335
       </price>
-      <IDcustomer>
+      <bill_id>
+        3
+      </bill_id>
+      <bill_customer_id>
         1
-      </IDcustomer>
-      <IDguitar>
-        1
-      </IDguitar>
-      <purchaseDatetime>
-        1998-09-09 00:00:00
-      </purchaseDatetime>
-      <IDshop>
-        1
-      </IDshop>
-      <ID>
-        6
-      </ID>
-    </instance>
-    <instance>
-      <price>
-        234324
-      </price>
-      <IDcustomer>
-        2
-      </IDcustomer>
-      <IDguitar>
+      </bill_customer_id>
+      <purchase_datetime>
+        2017-12-14 20:30:12
+      </purchase_datetime>
+      <bill_guitar_id>
         4
-      </IDguitar>
-      <purchaseDatetime>
-        2017-12-11 13:16:20
-      </purchaseDatetime>
-      <IDshop>
-        1
-      </IDshop>
-      <ID>
-        7
-      </ID>
+      </bill_guitar_id>
+      <bill_shop_id>
+        2
+      </bill_shop_id>
+    </instance>
+    <instance>
+      <price>
+        888
+      </price>
+      <bill_id>
+        4
+      </bill_id>
+      <bill_customer_id>
+        2
+      </bill_customer_id>
+      <purchase_datetime>
+        2017-12-14 20:30:35
+      </purchase_datetime>
+      <bill_guitar_id>
+        6
+      </bill_guitar_id>
+      <bill_shop_id>
+        2
+      </bill_shop_id>
     </instance>
   </bills>
   <shops>
     <instance>
-      <description/>
-      <type>
+      <shop_description/>
+      <shop_type>
         general store
-      </type>
-      <ID>
+      </shop_type>
+      <shop_id>
         1
-      </ID>
-      <name>
+      </shop_id>
+      <shop_name>
         Petroguitars
-      </name>
+      </shop_name>
     </instance>
     <instance>
-      <description/>
-      <type>
+      <shop_description/>
+      <shop_type>
         department store
-      </type>
-      <ID>
+      </shop_type>
+      <shop_id>
         2
-      </ID>
-      <name>
+      </shop_id>
+      <shop_name>
         Superinstruments
-      </name>
+      </shop_name>
     </instance>
   </shops>
   <guitars>
@@ -171,6 +151,9 @@
       <producer>
         Poland Factory #1
       </producer>
+      <guitar_id>
+        1
+      </guitar_id>
       <color>
         brown
       </color>
@@ -180,9 +163,6 @@
       <type>
         electric guitar
       </type>
-      <ID>
-        1
-      </ID>
       <description/>
     </instance>
     <instance>
@@ -192,6 +172,9 @@
       <producer>
         Poland Factory #1
       </producer>
+      <guitar_id>
+        2
+      </guitar_id>
       <color>
         brown
       </color>
@@ -201,9 +184,6 @@
       <type>
         electric guitar
       </type>
-      <ID>
-        2
-      </ID>
       <description/>
     </instance>
     <instance>
@@ -213,6 +193,9 @@
       <producer>
         Poland Factory #1
       </producer>
+      <guitar_id>
+        3
+      </guitar_id>
       <color>
         brown
       </color>
@@ -222,9 +205,6 @@
       <type>
         electric guitar
       </type>
-      <ID>
-        3
-      </ID>
       <description/>
     </instance>
     <instance>
@@ -234,6 +214,9 @@
       <producer>
         Poland Factory #1
       </producer>
+      <guitar_id>
+        4
+      </guitar_id>
       <color>
         white
       </color>
@@ -243,9 +226,6 @@
       <type>
         classic guitar
       </type>
-      <ID>
-        4
-      </ID>
       <description/>
     </instance>
     <instance>
@@ -255,6 +235,9 @@
       <producer>
         Poland Factory #1
       </producer>
+      <guitar_id>
+        5
+      </guitar_id>
       <color>
         red
       </color>
@@ -264,9 +247,6 @@
       <type>
         classic guitar
       </type>
-      <ID>
-        5
-      </ID>
       <description/>
     </instance>
     <instance>
@@ -276,6 +256,9 @@
       <producer>
         Poland Factory #1
       </producer>
+      <guitar_id>
+        6
+      </guitar_id>
       <color>
         blue
       </color>
@@ -285,9 +268,6 @@
       <type>
         classic guitar
       </type>
-      <ID>
-        6
-      </ID>
       <description>
         cool guitar
       </description>
@@ -299,6 +279,9 @@
       <producer>
         Poland Factory #1
       </producer>
+      <guitar_id>
+        7
+      </guitar_id>
       <color>
         blue
       </color>
@@ -308,9 +291,6 @@
       <type>
         classic guitar
       </type>
-      <ID>
-        7
-      </ID>
       <description>
         cool sound
       </description>
