@@ -32,8 +32,8 @@ class Customer(models.Model):
 
 class Bill(models.Model):
     bill_id = models.AutoField(primary_key=True)
-    bill_guitar_id = models.ForeignKey(Guitar, on_delete=models.CASCADE) # on_update=models.CASCADE
-    bill_shop_id = models.ForeignKey(Shop, on_delete=models.CASCADE)
-    bill_customer_id = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    bill_guitar = models.ForeignKey(Guitar, on_delete=models.CASCADE) # on_update=models.CASCADE
+    bill_shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
+    bill_customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     purchase_datetime = models.DateTimeField(default=datetime.datetime.now())
     price = models.IntegerField()

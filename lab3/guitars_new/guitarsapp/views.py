@@ -3,36 +3,49 @@ from __future__ import unicode_literals
 from django.http import HttpResponse
 from django.template import loader
 from django.shortcuts import render
+from django.shortcuts import redirect
+from django.utils.datastructures import MultiValueDictKeyError
 from . import db_connector
 from . import xml_handler
 import urllib
 import datetime
-from django.shortcuts import redirect
-from django.utils.datastructures import MultiValueDictKeyError
-from guitarsapp.models import Customer
+from guitarsapp.models import Customer, Shop, Guitar, Bill
+import django.apps
+
+
+# django.apps.apps.get_models(include_auto_created=False, include_swapped=False)
 
 
 def index(request):
-    cust = Customer.objects.create(first_name='Valera', last_name = 'Babenko')
     return HttpResponse(loader.get_template('index.html').render({}, request))
 
 
 def output_xml(request):
-    output_database = db_connector.get_database()
-    xml_handler.create_xml_file(xml_handler.create_xml_template(output_database))
-    return HttpResponse("<h1>Output success!</h1>")
+    output_database = get_database()
+    print(output_database)
+    # xml_handler.create_xml_file(xml_handler.create_xml_template(output_database))
+    return HttpResponse("<h1>Output XML success!</h1>")
+
+
+def get_database():
+    return {
+        'guitars': Guitar.objects.all().values(),
+        'shops': Shop.objects.all().values(),
+        'customers': Customer.objects.all().values(),
+        'bills': Bill.objects.all().values(),
+    }
 
 
 def input_xml(request):
     input_database = xml_handler.parse_xml_file()
     db_connector.clear_database()
     db_connector.insert_all_tables(input_database)
-    return HttpResponse("<h1>Input success!</h1>")
+    return HttpResponse("<h1>Input XML success!</h1>")
 
 
-def transput_xml(request):
+def transport_xml(request):
     xml_handler.transport_xml_data()
-    return HttpResponse("<h1>Transput success!</h1>")
+    return HttpResponse("<h1>Transport XML success!</h1>")
 
 
 def guitars(request):
@@ -54,7 +67,7 @@ def bills(request):
 def elements(request, table_name):
     dropdown_values = dict()
     if table_name == 'bills':
-        dropdown_values = db_connector.get_bills_foreign_key_values()
+        dropdown_values = get_bills_foreign_key_values()
     template = loader.get_template('elements.html')
     if request.method == 'GET':
         request_tail = request.GET.urlencode()
@@ -71,7 +84,7 @@ def elements(request, table_name):
                 return HttpResponse(template.render(context, request))
             message = 'Elements not found'
         context = {
-            'elements': db_connector.get_table_to_display(table_name),
+            'elements': get_table_values_to_display(table_name),
             'message': message,
             'table_name': table_name,
             'dropdown_values': dropdown_values,
@@ -79,6 +92,33 @@ def elements(request, table_name):
         return HttpResponse(template.render(context, request))
     elif request.method == 'POST':
         return elements_filter_post(request, table_name, template, dropdown_values)
+
+
+def get_table_values_to_display(table_name):
+    if table_name == 'bills':
+        print(get_table_object(table_name).objects.all().select_related().values())
+        return get_table_object(table_name).objects.all().select_related().values()
+    else:
+        return get_table_object(table_name).objects.all().values()
+
+
+def get_bills_foreign_key_values():
+    return {
+        'bill_guitar_id': Guitar.objects.values('guitar_id'),
+        'bill_shop_id': Shop.objects.values('shop_id'),
+        'bill_customer_id': Customer.objects.values('customer_id'),
+    }
+
+
+def get_table_object(table_name):
+    if table_name == 'shops':
+        return Shop
+    elif table_name == 'customers':
+        return Customer
+    elif table_name == 'guitars':
+        return Guitar
+    elif table_name == 'bills':
+        return Bill
 
 
 def add_bill(request):
@@ -98,7 +138,7 @@ def add_bill(request):
             method = 'add'
             if bill_request['bill_id'] != '':
                 user_bill_id = int(bill_request['bill_id'])
-                existed_bill_ids = db_connector.get_values_from_table('bills', 'bill_id')
+                existed_bill_ids = Bill.objects.values('bill_id')
                 for existed_bill_id in existed_bill_ids:
                     if existed_bill_id == user_bill_id:
                         method = 'update'
@@ -165,7 +205,7 @@ def elements_filter_post(request, table_name, template, dropdown_values):
                 }
                 return HttpResponse(template.render(context, request))
     context = {
-        'elements': db_connector.get_table_to_display(table_name),
+        'elements': get_table_values_to_display(table_name),
         'message': 'Elements not found',
         'table_name': table_name,
         'dropdown_values': dropdown_values,
