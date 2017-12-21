@@ -128,15 +128,16 @@ def elements_filter_get(table_name, request_tail):
             attribute = request_body[0]
             # in this 'try' block we check type of the first value, that was sent
             # then we choose 'between' for digit values or 'in' for string values
+            print(request_body[1])
             try:
-                numbers = request_body[1].split('%3A')
+                numbers = request_body[1].split(':')
                 int(numbers[0])
                 # in 'between' case we have to define only two numbers (for example, BETWEEN 1 AND 2)
                 if 1 <= len(numbers) <= 2:
                     return db_connector.get_table_filtered_number(table_name, attribute, numbers)
             except ValueError:
                 # this is 'in' case
-                return db_connector.get_table_filtered_str(table_name, attribute, request_body[1].split('%3A'))
+                return db_connector.get_table_filtered_str(table_name, attribute, request_body[1].split(':'))
             except IndexError:
                 return None
     return None

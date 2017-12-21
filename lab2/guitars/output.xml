@@ -58,42 +58,22 @@
     </instance>
     <instance>
       <price>
-        1234
+        134
       </price>
       <bill_id>
         2
       </bill_id>
       <bill_customer_id>
-        3
-      </bill_customer_id>
-      <purchase_datetime>
-        2017-12-14 20:29:56
-      </purchase_datetime>
-      <bill_guitar_id>
-        5
-      </bill_guitar_id>
-      <bill_shop_id>
-        1
-      </bill_shop_id>
-    </instance>
-    <instance>
-      <price>
-        21335
-      </price>
-      <bill_id>
-        3
-      </bill_id>
-      <bill_customer_id>
         1
       </bill_customer_id>
       <purchase_datetime>
-        2017-12-14 20:30:12
+        2017-12-20 14:51:38
       </purchase_datetime>
       <bill_guitar_id>
-        4
+        1
       </bill_guitar_id>
       <bill_shop_id>
-        2
+        1
       </bill_shop_id>
     </instance>
     <instance>
@@ -114,6 +94,26 @@
       </bill_guitar_id>
       <bill_shop_id>
         2
+      </bill_shop_id>
+    </instance>
+    <instance>
+      <price>
+        145
+      </price>
+      <bill_id>
+        5
+      </bill_id>
+      <bill_customer_id>
+        3
+      </bill_customer_id>
+      <purchase_datetime>
+        2017-12-14 22:03:40
+      </purchase_datetime>
+      <bill_guitar_id>
+        1
+      </bill_guitar_id>
+      <bill_shop_id>
+        3
       </bill_shop_id>
     </instance>
   </bills>
@@ -137,6 +137,20 @@
       </shop_type>
       <shop_id>
         2
+      </shop_id>
+      <shop_name>
+        Superinstruments
+      </shop_name>
+    </instance>
+    <instance>
+      <shop_description>
+        the first shop in the company
+      </shop_description>
+      <shop_type>
+        department store
+      </shop_type>
+      <shop_id>
+        3
       </shop_id>
       <shop_name>
         Superinstruments

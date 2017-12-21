@@ -73,7 +73,7 @@ WSGI_APPLICATION = 'guitars.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'guitars',
+        'NAME': 'guitars_new',
         'USER': 'root'
     }
 }

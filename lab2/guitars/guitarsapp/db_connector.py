@@ -229,10 +229,11 @@ def get_table_filtered_number(table_name, attribute, numbers):
         cur.execute("SHOW COLUMNS FROM %s" % table_name)
         column_names = cur.fetchall()
         for column_name in column_names:
-            if attribute == column_name[0] and column_name[1] == 'int(11)':
+            if attribute == column_name[0] and column_name[1] == 'int(10)':
                 # int this 'try' block we check all of the values if they consist of digits
                 try:
                     first_number = int(numbers[0])
+
                     # in this if-else structure we check how many values was sent in here
                     if len(numbers) == 1:
                         second_number = first_number
