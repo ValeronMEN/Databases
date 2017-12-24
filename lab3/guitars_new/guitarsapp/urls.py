@@ -10,6 +10,6 @@ urlpatterns = [
     url(r'^input/$', views.input_xml),
     url(r'^transput/$', views.transport_xml),
     url(r'^add_element/$', views.add_bill),
-    url(r'^delete_element/', views.delete_bill),
+    url(r'^delete_element/', views.delete_element),
     url(r'^$', views.index, name='index'),
 ]

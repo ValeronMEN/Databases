@@ -70,120 +70,12 @@ def elements(request, table_name):
         dropdown_values = get_bills_foreign_key_values()
     template = loader.get_template('elements.html')
     if request.method == 'GET':
-        request_tail = request.GET.urlencode()
-        message = 'All elements'
-        if request_tail:
-            respond = elements_filter_get(table_name, request_tail)
-            if respond:
-                context = {
-                    'elements': respond,
-                    'message': "Simple filtration results",
-                    'table_name': table_name,
-                    'dropdown_values': dropdown_values,
-                }
-                return HttpResponse(template.render(context, request))
-            message = 'Elements not found'
-        context = {
-            'elements': get_table_values_to_display(table_name),
-            'message': message,
-            'table_name': table_name,
-            'dropdown_values': dropdown_values,
-        }
-        return HttpResponse(template.render(context, request))
+        return elements_get(request, table_name, template, dropdown_values)
     elif request.method == 'POST':
-        return elements_filter_post(request, table_name, template, dropdown_values)
+        return elements_post(request, table_name, template, dropdown_values)
 
 
-def get_table_values_to_display(table_name):
-    if table_name == 'bills':
-        print(get_table_object(table_name).objects.all().select_related().values())
-        return get_table_object(table_name).objects.all().select_related().values()
-    else:
-        return get_table_object(table_name).objects.all().values()
-
-
-def get_bills_foreign_key_values():
-    return {
-        'bill_guitar_id': Guitar.objects.values('guitar_id'),
-        'bill_shop_id': Shop.objects.values('shop_id'),
-        'bill_customer_id': Customer.objects.values('customer_id'),
-    }
-
-
-def get_table_object(table_name):
-    if table_name == 'shops':
-        return Shop
-    elif table_name == 'customers':
-        return Customer
-    elif table_name == 'guitars':
-        return Guitar
-    elif table_name == 'bills':
-        return Bill
-
-
-def add_bill(request):
-    if request.method == 'POST':
-        try:
-            bill_request = {
-                'bill_guitar_id': request.POST['bill_guitar_id'],
-                'bill_shop_id': request.POST['bill_shop_id'],
-                'bill_customer_id': request.POST['bill_customer_id'],
-                'price': request.POST['price'],
-                'bill_id': request.POST['bill_id'],
-                'purchase_datetime': request.POST['purchase_datetime']
-            }
-        except MultiValueDictKeyError:
-            return redirect('/bills')
-        try:
-            method = 'add'
-            if bill_request['bill_id'] != '':
-                user_bill_id = int(bill_request['bill_id'])
-                existed_bill_ids = Bill.objects.values('bill_id')
-                for existed_bill_id in existed_bill_ids:
-                    if existed_bill_id == user_bill_id:
-                        method = 'update'
-                        break
-            if bill_request['purchase_datetime'] == '':
-                bill_request['purchase_datetime'] = datetime.datetime.now()
-            else:
-                datetime.datetime.strptime(bill_request['purchase_datetime'], '%Y-%m-%d')
-            if int(bill_request['price']) >= 0 and int(bill_request['bill_guitar_id']) >= 0 and int(
-                    bill_request['bill_shop_id']) >= 0 \
-                    and int(bill_request['bill_customer_id']) >= 0:
-                if method == 'add':
-                    db_connector.insert_bill(bill_request)
-                elif method == 'update':
-                    db_connector.update_bill(bill_request)
-        except ValueError:
-            print('ValueError')
-    return redirect('/bills')
-
-
-def elements_filter_get(table_name, request_tail):
-    request_tail = urllib.unquote(request_tail).replace('+', ' ')
-    # in sent URL we have to have as minimal 3 symbols (for example, v=1)
-    if len(request_tail) > 3:
-        request_body = request_tail.split('=')
-        # without '=' symbol: 3 - 1 = 2
-        if len(request_body) == 2:
-            attribute = request_body[0]
-            # in this 'try' block we check type of the first value, that was sent
-            # then we choose 'between' for digit values or 'in' for string values
-            try:
-                numbers = request_body[1].split('%3A')
-                int(numbers[0])
-                # in 'between' case we have to define only two numbers (for example, BETWEEN 1 AND 2)
-                if 1 <= len(numbers) <= 2:
-                    return db_connector.get_table_filtered_number(table_name, attribute, numbers)
-            except ValueError:
-                # this is 'in' case
-                return db_connector.get_table_filtered_str(table_name, attribute, request_body[1].split('%3A'))
-            except IndexError:
-                return None
-    return None
-
-
-def elements_filter_post(request, table_name, template, dropdown_values):
+def elements_post(request, table_name, template, dropdown_values):
     attr_t = request.POST['attr_t']
     attr_w = request.POST['attr_w']
     text = request.POST['text']
@@ -213,13 +105,155 @@ def elements_filter_post(request, table_name, template, dropdown_values):
     return HttpResponse(template.render(context, request))
 
 
-def delete_bill(request):
+def elements_get(request, table_name, template, dropdown_values):
+    request_tail = request.GET.urlencode()
+    message = 'All elements'
+    if request_tail:
+        respond = elements_get_filter(table_name, request_tail)
+        if respond:
+            context = {
+                'elements': respond,
+                'message': "Simple filtration results",
+                'table_name': table_name,
+                'dropdown_values': dropdown_values,
+            }
+            return HttpResponse(template.render(context, request))
+        message = 'Elements not found'
+    context = {
+        'elements': get_table_values_to_display(table_name),
+        'message': message,
+        'table_name': table_name,
+        'dropdown_values': dropdown_values,
+    }
+    return HttpResponse(template.render(context, request))
+
+
+def elements_get_filter(table_name, request_tail):
+    request_tail = urllib.unquote(request_tail).replace('+', ' ')
+    # in sent URL we have to have as minimal 3 symbols (for example, v=1)
+    if len(request_tail) > 3:
+        request_body = request_tail.split('=')
+        # without '=' symbol: 3 - 1 = 2
+        if len(request_body) == 2:
+            attribute = request_body[0]
+            # in this 'try' block we check type of the first value, that was sent
+            # then we choose 'between' for digit values or 'in' for string values
+            try:
+                numbers = request_body[1].split(':')
+                int(numbers[0])
+                # in 'between' case we have to define only two numbers (for example, BETWEEN 1 AND 2)
+                if 1 <= len(numbers) <= 2:
+                    return db_connector.get_table_filtered_number(table_name, attribute, numbers)
+            except ValueError:
+                # this is 'in' case
+                return db_connector.get_table_filtered_str(table_name, attribute, request_body[1].split(':'))
+            except IndexError:
+                return None
+    return None
+
+
+def get_table_values_to_display(table_name):
+    if table_name == 'bills':
+        # print(get_table_object(table_name).objects.all().select_related().values())
+        return get_table_object(table_name).objects.all().select_related().values()
+    else:
+        return get_table_object(table_name).objects.all().values()
+
+
+# 'bill_shop_id': Shop.objects.values('shop_id') - takes all values with headlines
+def get_bills_foreign_key_values():
+    guitars_obj = Guitar.objects.only('guitar_id')
+    shops_obj = Shop.objects.only('shop_id')
+    customers_obj = Customer.objects.only('customer_id')
+    guitars_id = list()
+    shops_id = list()
+    customers_id = list()
+    for guitar in guitars_obj:
+        guitars_id.append(int(guitar.guitar_id))
+    for shop in shops_obj:
+        shops_id.append(int(shop.shop_id))
+    for customer in customers_obj:
+        customers_id.append(int(customer.customer_id))
+    return {
+        'bill_guitar_id': guitars_id,
+        'bill_shop_id': shops_id,
+        'bill_customer_id': customers_id,
+    }
+
+
+def get_table_object(table_name):
+    if table_name == 'shops':
+        return Shop
+    elif table_name == 'customers':
+        return Customer
+    elif table_name == 'guitars':
+        return Guitar
+    elif table_name == 'bills':
+        return Bill
+
+
+def add_bill(request):
+    if request.method == 'POST':
+        try:
+            bill_request = {
+                'bill_guitar_id': request.POST['bill_guitar_id'],
+                'bill_shop_id': request.POST['bill_shop_id'],
+                'bill_customer_id': request.POST['bill_customer_id'],
+                'price': request.POST['price'],
+                'bill_id': request.POST['bill_id'],
+                'purchase_datetime': request.POST['purchase_datetime']
+            }
+        except MultiValueDictKeyError:
+            return redirect('/bills')
+        try:
+            method = 'insert'
+            if bill_request['bill_id'] != '':
+                user_bill_id = int(bill_request['bill_id'])
+                existed_bill_ids = Bill.objects.values('bill_id')
+                for existed_bill_id in existed_bill_ids:
+                    if existed_bill_id == user_bill_id:
+                        method = 'update'
+                        break
+            if bill_request['purchase_datetime'] == '':
+                bill_request['purchase_datetime'] = datetime.datetime.now()
+            else:
+                datetime.datetime.strptime(bill_request['purchase_datetime'], '%Y-%m-%d')
+            if int(bill_request['price']) >= 0 and int(bill_request['bill_guitar_id']) >= 0 and int(
+                    bill_request['bill_shop_id']) >= 0 \
+                    and int(bill_request['bill_customer_id']) >= 0:
+                if method == 'insert':
+                    new_bill = Bill(bill_guitar_id=bill_request['bill_guitar_id'],
+                                    bill_shop_id=bill_request['bill_shop_id'],
+                                    bill_customer_id=bill_request['bill_customer_id'],
+                                    price=bill_request['price'],
+                                    purchase_datetime=bill_request['purchase_datetime'])
+                    new_bill.save()
+                elif method == 'update':
+                    Bill.objects.filter(bill_id=bill_request['bill_id']).update(
+                        bill_guitar_id=bill_request['bill_guitar_id'],
+                        bill_shop_id=bill_request['bill_shop_id'],
+                        bill_customer_id=bill_request['bill_customer_id'],
+                        price=bill_request['price'],
+                        purchase_datetime=bill_request['purchase_datetime'])
+        except ValueError:
+            print('ValueError')
+    return redirect('/bills')
+
+
+def delete_element(request):
     if request.method == 'POST':
         request_tail = request.path.split('/')
         try:
             table_name = request_tail[2]
             element_id = request_tail[3]
-            db_connector.delete_record(table_name, 'bill_id', int(element_id))
+            if table_name == 'bills':
+                Bill.objects.filter(bill_id=int(element_id)).delete()
+            elif table_name == 'guitars':
+                Guitar.objects.filter(guitar_id=int(element_id)).delete()
+            elif table_name == 'shops':
+                Shop.objects.filter(shop_od=int(element_id)).delete()
+            elif table_name == 'customers':
+                Customer.objects.filter(customer_id=int(element_id)).delete()
         except IndexError:
             return HttpResponse('<h1>INDEX ERROR</h1>')
         return redirect('/%s' % request_tail[2])
