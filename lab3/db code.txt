@@ -1,0 +1,39 @@
+Creating event:
+CREATE EVENT `reduce_event`
+  ON SCHEDULE EVERY 1 WEEK STARTS '2017-12-24 21:45:00'
+  ON COMPLETION NOT PRESERVE
+  ENABLE
+  COMMENT '' DO
+CALL reduce_price();
+
+
+Altering event:
+ALTER EVENT reduce_event
+    ON SCHEDULE EVERY 1 WEEK
+      STARTS '2017-12-24 22:10:00'
+    DO
+      CALL reduce_price();
+
+
+Creating procedure:
+delimiter //
+
+CREATE PROCEDURE reduce_price ()
+ 
+BEGIN
+  
+UPDATE guitarsapp_bill SET price=price-1 WHERE price > 101;
+ 
+END //
+ 
+delimiter ;
+
+
+Creating trigger:
+delimiter //
+CREATE TRIGGER `reduce_trigger` BEFORE INSERT ON `guitarsapp_bill`
+FOR EACH ROW 
+BEGIN
+   SET NEW.price = NEW.price * 2;
+END //
+delimiter ;

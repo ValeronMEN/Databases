@@ -11,9 +11,7 @@ import urllib
 import datetime
 from guitarsapp.models import Customer, Shop, Guitar, Bill
 import django.apps
-
-
-# django.apps.apps.get_models(include_auto_created=False, include_swapped=False)
+import MySQLdb as mdb
 
 
 def index(request):
@@ -72,37 +70,7 @@ def elements(request, table_name):
     if request.method == 'GET':
         return elements_get(request, table_name, template, dropdown_values)
     elif request.method == 'POST':
-        return elements_post(request, table_name, template, dropdown_values)
-
-
-def elements_post(request, table_name, template, dropdown_values):
-    attr_t = request.POST['attr_t']
-    attr_w = request.POST['attr_w']
-    text = request.POST['text']
-    words = request.POST['words']
-    text_columns_array = db_connector.get_text_column_names(table_name)
-    if len(text_columns_array) != 0:
-        result = []
-        for column_name in text_columns_array:
-            if attr_w == column_name and words != '':
-                result = db_connector.get_table_filtered_text_words(table_name, attr_w, words.split(' '))
-            elif attr_t == column_name and text != '':
-                result = db_connector.get_table_filtered_text_phrase(table_name, attr_t, text)
-            if len(result) != 0:
-                context = {
-                    'elements': result,
-                    'message': 'Boolean mode filtration results',
-                    'table_name': table_name,
-                    'dropdown_values': dropdown_values,
-                }
-                return HttpResponse(template.render(context, request))
-    context = {
-        'elements': get_table_values_to_display(table_name),
-        'message': 'Elements not found',
-        'table_name': table_name,
-        'dropdown_values': dropdown_values,
-    }
-    return HttpResponse(template.render(context, request))
+        return elements_post_filter(request, table_name, template, dropdown_values)
 
 
 def elements_get(request, table_name, template, dropdown_values):
@@ -116,6 +84,8 @@ def elements_get(request, table_name, template, dropdown_values):
                 'message': "Simple filtration results",
                 'table_name': table_name,
                 'dropdown_values': dropdown_values,
+                'event_time': get_reduce_event_time(),
+                'trigger_switch': get_activate_button_label(),
             }
             return HttpResponse(template.render(context, request))
         message = 'Elements not found'
@@ -124,6 +94,8 @@ def elements_get(request, table_name, template, dropdown_values):
         'message': message,
         'table_name': table_name,
         'dropdown_values': dropdown_values,
+        'event_time': get_reduce_event_time(),
+        'trigger_switch': get_activate_button_label(),
     }
     return HttpResponse(template.render(context, request))
 
@@ -152,10 +124,58 @@ def elements_get_filter(table_name, request_tail):
     return None
 
 
+def elements_post_filter(request, table_name, template, dropdown_values):
+    attr_t = request.POST['attr_t']
+    attr_w = request.POST['attr_w']
+    text = request.POST['text']
+    words = request.POST['words']
+    text_columns_array = db_connector.get_text_column_names(table_name)
+    if len(text_columns_array) != 0:
+        result = []
+        for column_name in text_columns_array:
+            if attr_w == column_name and words != '':
+                result = db_connector.get_table_filtered_text_words(table_name, attr_w, words.split(' '))
+            elif attr_t == column_name and text != '':
+                result = db_connector.get_table_filtered_text_phrase(table_name, attr_t, text)
+            if len(result) != 0:
+                context = {
+                    'elements': result,
+                    'message': 'Boolean mode filtration results',
+                    'table_name': table_name,
+                    'dropdown_values': dropdown_values,
+                    'event_time': get_reduce_event_time(),
+                    'trigger_switch': get_activate_button_label(),
+                }
+                return HttpResponse(template.render(context, request))
+    context = {
+        'elements': get_table_values_to_display(table_name),
+        'message': 'Elements not found',
+        'table_name': table_name,
+        'dropdown_values': dropdown_values,
+        'event_time': get_reduce_event_time(),
+        'trigger_switch': get_activate_button_label(),
+    }
+    return HttpResponse(template.render(context, request))
+
+
 def get_table_values_to_display(table_name):
     if table_name == 'bills':
-        # print(get_table_object(table_name).objects.all().select_related().values())
-        return get_table_object(table_name).objects.all().select_related().values()
+        bill_values = get_table_object(table_name).objects.all().values()
+        for bill_value in bill_values:
+            bill_value['guitar_type'] = Bill.objects.get(bill_id=bill_value['bill_id']).bill_guitar.type
+            bill_value['guitar_name'] = Bill.objects.get(bill_id=bill_value['bill_id']).bill_guitar.name
+            bill_value['guitar_brand'] = Bill.objects.get(bill_id=bill_value['bill_id']).bill_guitar.brand
+            bill_value['guitar_color'] = Bill.objects.get(bill_id=bill_value['bill_id']).bill_guitar.color
+            bill_value['guitar_producer'] = Bill.objects.get(bill_id=bill_value['bill_id']).bill_guitar.producer
+            bill_value['guitar_description'] = Bill.objects.get(bill_id=bill_value['bill_id']).bill_guitar.description
+
+            bill_value['customer_first_name'] = Bill.objects.get(bill_id=bill_value['bill_id']).bill_customer.first_name
+            bill_value['customer_last_name'] = Bill.objects.get(bill_id=bill_value['bill_id']).bill_customer.last_name
+
+            bill_value['shop_name'] = Bill.objects.get(bill_id=bill_value['bill_id']).bill_shop.shop_name
+            bill_value['shop_type'] = Bill.objects.get(bill_id=bill_value['bill_id']).bill_shop.shop_type
+            bill_value['shop_description'] = Bill.objects.get(bill_id=bill_value['bill_id']).bill_shop.shop_description
+        return bill_values
     else:
         return get_table_object(table_name).objects.all().values()
 
@@ -179,6 +199,89 @@ def get_bills_foreign_key_values():
         'bill_shop_id': shops_id,
         'bill_customer_id': customers_id,
     }
+
+
+def events(request):
+    if request.method == 'POST':
+        try:
+            event_time = request.POST['event_time']
+            day, month, year, hours, minutes, seconds = event_time.split('/')
+            time = datetime.datetime(int(year), int(month), int(day), int(hours), int(minutes), int(seconds))
+            set_reduce_event_time(time)
+        except IndexError:
+            print('IndexError')
+        except ValueError:
+            print('ValueError')
+    return redirect('/bills')
+
+
+def set_reduce_event_time(time):
+    con = mdb.connect('localhost', 'root', '', 'guitars_new')
+    with con:
+        cur = con.cursor()
+        cur.execute("ALTER EVENT reduce_event ON SCHEDULE EVERY 1 WEEK STARTS '%s' DO CALL reduce_price();"
+                    % (time,))
+
+
+def triggers(request):
+    if not get_reduce_trigger():
+        create_reduce_trigger()
+    else:
+        delete_reduce_trigger()
+    return redirect('/bills')
+
+
+def procedures(request):
+    if request.method == 'POST':
+        con = mdb.connect('localhost', 'root', '', 'guitars_new')
+        with con:
+            cur = con.cursor()
+            cur.callproc('reduce_price')
+    return redirect('/bills')
+
+
+def get_activate_button_label():
+    if not get_reduce_trigger():
+        return 'Activate'
+    else:
+        return 'Deactivate'
+
+
+def create_reduce_trigger():
+    con = mdb.connect('localhost', 'root', '', 'guitars_new')
+    with con:
+        cur = con.cursor()
+        cur.execute("CREATE TRIGGER `reduce_trigger` "
+                    "BEFORE INSERT ON `guitarsapp_bill` "
+                    "FOR EACH ROW BEGIN "
+                    "SET NEW.price = NEW.price * 2; "
+                    "END")
+
+
+def get_reduce_trigger():
+    con = mdb.connect('localhost', 'root', '', 'guitars_new')
+    with con:
+        cur = con.cursor()
+        cur.execute("SHOW TRIGGERS")
+        rows = cur.fetchall()
+        return rows
+
+
+def delete_reduce_trigger():
+    con = mdb.connect('localhost', 'root', '', 'guitars_new')
+    with con:
+        cur = con.cursor()
+        cur.execute("DROP TRIGGER reduce_trigger;")
+
+
+def get_reduce_event_time():
+    con = mdb.connect('localhost', 'root', '', 'guitars_new')
+    with con:
+        cur = con.cursor()
+        cur.execute("SHOW events;")
+        rows = cur.fetchall()
+        result = rows[0][8]
+        return result.ctime()
 
 
 def get_table_object(table_name):
