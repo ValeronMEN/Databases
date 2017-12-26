@@ -1,0 +1,31 @@
+CREATE DATABASE tr_test;
+USE tr_test
+CREATE TABLE numbers (
+    ID int NOT NULL
+);
+INSERT INTO numbers VALUES(1),(2),(3);
+
+Committed reads:
+USE tr_test
+SET GLOBAL TRANSACTION ISOLATION LEVEL READ COMMITTED;
+1) BEGIN;
+   SELECT * FROM numbers;
+2) BEGIN;
+   INSERT INTO numbers VALUES (7),(8);
+1) SELECT * FROM numbers;
+2) COMMIT;
+1) SELECT * FROM numbers;
+   COMMIT;
+
+Repeatable Reads
+USE tr_test
+SET GLOBAL TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+1) BEGIN;
+   SELECT * FROM numbers;
+2) BEGIN;
+   INSERT INTO numbers VALUES(6);
+   COMMIT;
+   SELECT * FROM numbers;
+1) SELECT * FROM numbers;
+   COMMIT;
+   SELECT * FROM numbers;

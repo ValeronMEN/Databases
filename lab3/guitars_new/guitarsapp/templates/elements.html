@@ -28,28 +28,28 @@
             <li class="nav-item">
               <a class="nav-link" href="/">Home</a>
             </li>
-              {% if table_name == 'guitars' %}
+              {% if table_name == 'guitarsapp_guitar' %}
             <li class="nav-item active">
               {% else %}
             <li class="nav-item">
              {% endif %}
               <a class="nav-link" href="/guitars">Guitars</a>
             </li>
-              {% if table_name == 'shops' %}
+              {% if table_name == 'guitarsapp_shop' %}
             <li class="nav-item active">
               {% else %}
             <li class="nav-item">
              {% endif %}
               <a class="nav-link" href="/shops">Shops</a>
             </li>
-              {% if table_name == 'customers' %}
+              {% if table_name == 'guitarsapp_customer' %}
             <li class="nav-item active">
               {% else %}
             <li class="nav-item">
              {% endif %}
               <a class="nav-link" href="/customers">Customers</a>
             </li>
-              {% if table_name == 'bills' %}
+              {% if table_name == 'guitarsapp_bill' %}
             <li class="nav-item active">
               {% else %}
             <li class="nav-item">
@@ -64,7 +64,7 @@
     <div class="container-fluid">
       <div class="row">
         <nav class="col-sm-3 col-md-2 d-none d-sm-block bg-light sidebar">
-          {% if table_name == 'bills' %}
+          {% if table_name == 'guitarsapp_bill' %}
           <form action="/events/" class=" mt-2 mt-md-0 left_forms" method="post">
             {% csrf_token %}
             <div class="form-div">
@@ -150,7 +150,7 @@
                     {% for obj in element %}
                   <th>{{ obj }}</th>
                     {% endfor %}
-                  {% if table_name == 'bills' %}
+                  {% if table_name == 'guitarsapp_bill' %}
                   <th>action</th>
                   {% endif %}
                 </tr>
@@ -172,7 +172,7 @@
                           {% endif %}
                       {% endif %}
                   {% endfor %}
-                  {% if table_name == 'bills' %}
+                  {% if table_name == 'guitarsapp_bill' %}
                   <td>
                     <form class="mt-2 mt-md-0 left_forms" method="post" action="/delete_element/{{ table_name }}/{{ element.bill_id }}">
                       {% csrf_token %}
@@ -182,7 +182,7 @@
                   {% endif %}
                 </tr>
               {% endfor %}
-              {% if table_name == 'bills' %}
+              {% if table_name == 'guitarsapp_bill' %}
               {% for element in elements|slice:":1" %}
                   <tr>
                     <form class="mt-2 mt-md-0 left_forms" method="post" action="/add_element/">
