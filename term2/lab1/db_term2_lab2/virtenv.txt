@@ -1,0 +1,2 @@
+type it to cmd to activate virtual environment
+C:\Users\DrLove\PycharmProjects\db_term2_lab2\venv\Scripts\activate
