@@ -20,22 +20,45 @@ def get_smth_from_html_data(data):
     page = io.StringIO(data)
     tree = lxml.etree.parse(page, parser)
     imgNodes = tree.xpath('//img[@src and string-length(@src)!=0]')
-    imagesStr = ''
+    imageList = []
     for node in imgNodes:
-        # print(node.attrib['src'])
-        imagesStr += (node.attrib['src'] + '\n')
+        imageList = imageList + [node.attrib['src']]
     textNodes = tree.xpath('//p[string-length(text()) > 0]')
-    textStr = ''
+    textList = []
     for node in textNodes:
         text = node.text
         if text != None:
-            textStr += (text + ';; ')
-        # if text != None:
-        #     for symbol in text:
-        #         if symbol != ' ':
-        #             textStr += (text + '\n')
-        #             break
-    return imagesStr, textStr
+            textList = textList + [text]
+    return imageList, textList
+
+
+def get_smth_from_xml_data(data):
+    parser = etree.XMLParser()
+    page = io.StringIO(data)
+    tree = lxml.etree.parse(page, parser)
+    root = tree.getroot()
+    pageNodesCount = len(root.getchildren())
+    print("Pages count: %s" % pageNodesCount)
+    pagesDict = {}
+    for pageNode in range(1, pageNodesCount+1):
+        xPathCountFragmentsStr = "count(/data/page[position() = %s]/fragment[@type = 'text'])" % pageNode
+        fragmentsTextNodesCount = tree.xpath(xPathCountFragmentsStr)
+        xPathGetPageUrlStr = "/data/page[position() = %s]" % pageNode
+        pageNodeUrl = tree.xpath(xPathGetPageUrlStr)
+        url = pageNodeUrl[0].attrib['url']
+        print("%s has text fragments count: %s" % (url, fragmentsTextNodesCount))
+        pagesDict.update({url: fragmentsTextNodesCount})
+    maxCount = -1
+    for url, count in pagesDict.items():
+        if count > maxCount:
+            maxCount = count
+    isMaxFound = 0
+    for url, count in pagesDict.items():
+        if count == maxCount:
+            print("%s has maximal text fragments count: %s" % (url, count))
+            isMaxFound = 1
+    if not isMaxFound:
+        print("Maximum's not existing")
 
 
 def prettify(elem):
@@ -49,33 +72,43 @@ def create_xml_template(urlPlusTextAndImgStrs):
     for url, data in urlPlusTextAndImgStrs.items():
         pages = SubElement(top, 'page')
         pages.set('url', url)
-        for type, str in data.items():
-            element = SubElement(pages, 'fragment')
-            element.text = str
-            element.set('type', type)
+        for type, list in data.items():
+            for str in list:
+                element = SubElement(pages, 'fragment')
+                element.text = str
+                element.set('type', type)
     return prettify(top)
 
 
 def do_web_crawling_and_create_xml_results_data(urlToCrawling, maxAmountOfPagesToCrawling):
-    # http://lxml.de/FAQ.html - ideal example
-    # http://kpi.ua/
+    fileNameToWrite = 'data.xml'
     # https://rozetka.com.ua/
     urlPlusDataDict = crawler.spider(urlToCrawling, maxAmountOfPagesToCrawling)
     urlPlusTextAndImgStrs = {}
     for url, data in urlPlusDataDict.items():
-        imagesStr, textStr = get_smth_from_html_data(data)
-        urlPlusTextAndImgStrs.update({url: {'text': textStr, 'image': imagesStr}})
+        imagesList, textList = get_smth_from_html_data(data)
+        urlPlusTextAndImgStrs.update({url: {'text': textList, 'image': imagesList}})
     data = create_xml_template(urlPlusTextAndImgStrs)
-    # print(data)
-    with open('data.xml', 'wb') as output_file:
+    with open(fileNameToWrite, 'wb') as output_file:
         output_file.write(data)
+    return fileNameToWrite
+
+
+def do_xml_parsing_and_counting_text_fragments(fileName):
+    with open(fileName, 'r') as input_file:
+        dataList = input_file.readlines()
+        dataList.pop(0)
+        get_smth_from_xml_data(''.join(dataList))
 
 
 # main function
 def main(argv=None):
     if argv is None:
         argv = sys.argv
-    do_web_crawling_and_create_xml_results_data("http://kpi.ua/", 5)
+    # Task 1
+    fileName = do_web_crawling_and_create_xml_results_data("http://kpi.ua/", 5)
+    # Task 2
+    do_xml_parsing_and_counting_text_fragments('data.xml')
     print("Program's completed")
 
 
