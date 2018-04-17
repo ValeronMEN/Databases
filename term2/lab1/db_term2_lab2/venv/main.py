@@ -1,5 +1,6 @@
 import sys
 import io
+import requests
 # lxml
 import lxml
 from lxml import etree
@@ -15,7 +16,7 @@ import crawler
 #     def __init__(self, msg):
 #        self.msg = msg
 
-def get_smth_from_html_data(data):
+def get_images_and_text_from_html_data(data):
     parser = etree.HTMLParser()
     page = io.StringIO(data)
     tree = lxml.etree.parse(page, parser)
@@ -30,6 +31,55 @@ def get_smth_from_html_data(data):
         if text != None:
             textList = textList + [text]
     return imageList, textList
+
+
+def get_price_from_personal_page(onlineShopUrl):
+    r = requests.get(onlineShopUrl)
+    parser = etree.HTMLParser()
+    page = io.StringIO(r.text)
+    tree = lxml.etree.parse(page, parser)
+    priceLinks = tree.xpath("//meta[@itemprop = 'price']")
+    price = priceLinks[0].attrib['content']
+    return price
+
+
+def get_prices_images_desc_from_html_data_from_rozetka():
+    onlineShopUrl = "https://rozetka.com.ua/headphones/c80027/"
+    r = requests.get(onlineShopUrl)
+    parser = etree.HTMLParser()
+    page = io.StringIO(r.text)
+    tree = lxml.etree.parse(page, parser)
+    productDivs = tree.xpath("//div[@class = 'g-i-tile-i-box-desc']")
+    productCount = len(productDivs)
+    with open('rozetka.html', 'wb') as output_file:
+        encodingText = r.text.encode('cp1251', errors='replace')
+        output_file.write(encodingText)
+    dataToXml = {}
+    # Images
+    imageNodes = tree.xpath("//div[@class = 'g-i-tile-i-box-desc']/div[@class = 'clearfix pos-fix']/div/a/img")
+    # Description
+    descNodes = tree.xpath("//ul[@class = 'short-chars-l flex']")
+    # Prices
+    priceLinks = tree.xpath("//div[@class = 'g-i-tile-i-box-desc']/div[@class = 'clearfix pos-fix']/div/a")
+    prices = ()
+    for link in priceLinks:
+        linkHref = link.attrib['href']
+        price = get_price_from_personal_page(linkHref)
+        prices += (str(price),)
+    print(prices)
+    for id in range(0, productCount):
+        liElements = descNodes[id].getchildren()
+        descStr = ''
+        for child in liElements:
+            liElement = child.getchildren()
+            spanElement = liElement[1].getchildren()
+            value = spanElement[0].getchildren()
+            if spanElement[0].text != None:
+                descStr += liElement[0].text + spanElement[0].text
+            else:
+                descStr += liElement[0].text + value[0].text
+        dataToXml.update({id: {'price': prices[id], 'desc':descStr, 'img':imageNodes[id].attrib['src']}})
+    return(dataToXml)
 
 
 def get_smth_from_xml_data(data):
@@ -67,7 +117,7 @@ def prettify(elem):
     return reparsed.toprettyxml(indent="  ", encoding='windows-1251') # UTF-8 / windows-1251
 
 
-def create_xml_template(urlPlusTextAndImgStrs):
+def create_xml_template_for_task_1(urlPlusTextAndImgStrs):
     top = Element('data')
     for url, data in urlPlusTextAndImgStrs.items():
         pages = SubElement(top, 'page')
@@ -80,15 +130,31 @@ def create_xml_template(urlPlusTextAndImgStrs):
     return prettify(top)
 
 
+def create_xml_template_for_task_3(dataDict):
+    top = Element('data')
+    for id, data in dataDict.items():
+        products = SubElement(top, 'product')
+        products.set('id', str(id))
+        for type, value in data.items():
+            element = SubElement(products, type)
+            # if type(value).__name__ == "int":
+            #     value = str(value)
+            # if type(value) is str:
+            #     element.text = value
+            # else:
+            #     element.text = str(value)
+            element.text = value
+    return prettify(top)
+
+
 def do_web_crawling_and_create_xml_results_data(urlToCrawling, maxAmountOfPagesToCrawling):
     fileNameToWrite = 'data.xml'
-    # https://rozetka.com.ua/
     urlPlusDataDict = crawler.spider(urlToCrawling, maxAmountOfPagesToCrawling)
     urlPlusTextAndImgStrs = {}
     for url, data in urlPlusDataDict.items():
-        imagesList, textList = get_smth_from_html_data(data)
+        imagesList, textList = get_images_and_text_from_html_data(data)
         urlPlusTextAndImgStrs.update({url: {'text': textList, 'image': imagesList}})
-    data = create_xml_template(urlPlusTextAndImgStrs)
+    data = create_xml_template_for_task_1(urlPlusTextAndImgStrs)
     with open(fileNameToWrite, 'wb') as output_file:
         output_file.write(data)
     return fileNameToWrite
@@ -101,14 +167,23 @@ def do_xml_parsing_and_counting_text_fragments(fileName):
         get_smth_from_xml_data(''.join(dataList))
 
 
+def compare_prices_in_online_shop():
+    dataToXml = get_prices_images_desc_from_html_data_from_rozetka()
+    xmledData = create_xml_template_for_task_3(dataToXml)
+    with open('task3.xml', 'wb') as output_file:
+        output_file.write(xmledData)
+
+
 # main function
 def main(argv=None):
     if argv is None:
         argv = sys.argv
     # Task 1
-    fileName = do_web_crawling_and_create_xml_results_data("http://kpi.ua/", 5)
+    # fileName = do_web_crawling_and_create_xml_results_data("http://kpi.ua/", 5)
     # Task 2
-    do_xml_parsing_and_counting_text_fragments('data.xml')
+    # do_xml_parsing_and_counting_text_fragments(fileName)
+    # Task 3
+    compare_prices_in_online_shop()
     print("Program's completed")
 
 
