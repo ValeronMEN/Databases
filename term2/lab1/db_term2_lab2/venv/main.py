@@ -12,9 +12,6 @@ from xml.etree.ElementTree import Element, SubElement
 # custom libs
 import crawler
 
-# class Usage():
-#     def __init__(self, msg):
-#        self.msg = msg
 
 def get_images_and_text_from_html_data(data):
     parser = etree.HTMLParser()
@@ -43,9 +40,8 @@ def get_price_from_personal_page(onlineShopUrl):
     return price
 
 
-def get_prices_images_desc_from_html_data_from_rozetka():
-    onlineShopUrl = "https://rozetka.com.ua/headphones/c80027/"
-    r = requests.get(onlineShopUrl)
+def get_prices_images_desc_from_html_data_from_rozetka(rozetkaUrl):
+    r = requests.get(rozetkaUrl)
     parser = etree.HTMLParser()
     page = io.StringIO(r.text)
     tree = lxml.etree.parse(page, parser)
@@ -66,7 +62,6 @@ def get_prices_images_desc_from_html_data_from_rozetka():
         linkHref = link.attrib['href']
         price = get_price_from_personal_page(linkHref)
         prices += (str(price),)
-    print(prices)
     for id in range(0, productCount):
         liElements = descNodes[id].getchildren()
         descStr = ''
@@ -82,7 +77,7 @@ def get_prices_images_desc_from_html_data_from_rozetka():
     return(dataToXml)
 
 
-def get_smth_from_xml_data(data):
+def get_maximal_count_of_text_fragments_from_xml_data(data):
     parser = etree.XMLParser()
     page = io.StringIO(data)
     tree = lxml.etree.parse(page, parser)
@@ -137,12 +132,6 @@ def create_xml_template_for_task_3(dataDict):
         products.set('id', str(id))
         for type, value in data.items():
             element = SubElement(products, type)
-            # if type(value).__name__ == "int":
-            #     value = str(value)
-            # if type(value) is str:
-            #     element.text = value
-            # else:
-            #     element.text = str(value)
             element.text = value
     return prettify(top)
 
@@ -164,14 +153,26 @@ def do_xml_parsing_and_counting_text_fragments(fileName):
     with open(fileName, 'r') as input_file:
         dataList = input_file.readlines()
         dataList.pop(0)
-        get_smth_from_xml_data(''.join(dataList))
+        get_maximal_count_of_text_fragments_from_xml_data(''.join(dataList))
 
 
-def compare_prices_in_online_shop():
-    dataToXml = get_prices_images_desc_from_html_data_from_rozetka()
+def compare_prices_in_online_shop(rozetkaUrl):
+    outputXmlFileName = 'task3.xml'
+    dataToXml = get_prices_images_desc_from_html_data_from_rozetka(rozetkaUrl)
     xmledData = create_xml_template_for_task_3(dataToXml)
-    with open('task3.xml', 'wb') as output_file:
+    with open(outputXmlFileName, 'wb') as output_file:
         output_file.write(xmledData)
+    return outputXmlFileName
+
+
+def do_xslt(xmlFileName, xslFileName):
+    parser = etree.XMLParser()
+    dom = etree.parse(xmlFileName, parser)
+    xslt = etree.parse(xslFileName, parser)
+    transform = etree.XSLT(xslt)
+    newdom = transform(dom)
+    with open('task4.html', 'wb') as output_file:
+        output_file.write(newdom)
 
 
 # main function
@@ -179,11 +180,15 @@ def main(argv=None):
     if argv is None:
         argv = sys.argv
     # Task 1
-    # fileName = do_web_crawling_and_create_xml_results_data("http://kpi.ua/", 5)
+    fileName = do_web_crawling_and_create_xml_results_data("http://kpi.ua/", 5)
     # Task 2
-    # do_xml_parsing_and_counting_text_fragments(fileName)
+    do_xml_parsing_and_counting_text_fragments(fileName)
     # Task 3
-    compare_prices_in_online_shop()
+    # onlineShopUrl = "https://rozetka.com.ua/headphones/c80027/"
+    rozetkaUrl = "https://rozetka.com.ua/headphones/c80027/producer=samsung,xiaomi/"
+    outputXmlFileName = compare_prices_in_online_shop(rozetkaUrl)
+    # Task 4
+    do_xslt(outputXmlFileName, 'task4.xsl')
     print("Program's completed")
 
 

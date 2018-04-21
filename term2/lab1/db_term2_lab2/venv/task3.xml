@@ -1,91 +1,18 @@
 <?xml version="1.0" encoding="windows-1251"?>
 <data>
   <product id="0">
-    <price>259</price>
-    <desc>
-Тип наушников:
-Закрытые
-Интерфейс проводного подключения:
-1 x mini-jack (разъем 3.5 мм)
-Диапазон частот наушников:
-
-20 - 20000 Гц
-
-Длина шнура:
-
-1.8 м
-
-Вес:
-
-204 г
-</desc>
-    <img>https://i2.rozetka.ua/goods/2341833/trust_21953_images_2341833737.jpg</img>
-  </product>
-  <product id="1">
-    <price>1999</price>
-    <desc>
-Тип наушников:
-Закрытые
-Интерфейс проводного подключения:
-1 x mini-jack (разъем 3.5 мм)
-Диапазон частот наушников:
-
-12 - 28000 Гц
-
-Длина шнура:
-
-1.3 м + 2 м (разветвитель)
-
-Вес:
-
-340 г
-</desc>
-    <img>https://i2.rozetka.ua/goods/2041644/razer_rz04_02050300_r3m1_images_2041644294.jpg</img>
-  </product>
-  <product id="2">
-    <price>3199</price>
-    <desc>
-Тип наушников:
-Закрытые
-Интерфейс проводного подключения:
-1 x mini-jack (разъем 3.5 мм)
-Диапазон частот наушников:
-
-15 - 25 000 Гц
-
-Длина шнура:
-
-1 м + удлинитель 2 м
-
-Вес:
-
-320 г
-</desc>
-    <img>https://i1.rozetka.ua/goods/434614/kingston_hyperx_cloud_ii_red_images_434614402.jpg</img>
-  </product>
-  <product id="3">
     <price>1699</price>
     <desc>
 Тип наушников:
-Закрытые
-Интерфейс проводного подключения:
-1 x mini-jack (разъем 3.5 мм)
-Диапазон частот наушников:
-
-18 - 23000 Гц
-
-Длина шнура:
-
-1.3 м + удлинитель 1.7 м
-
+Вкладыши
 Вес:
 
-275 г
+51 г
 </desc>
-    <img>https://i1.rozetka.ua/goods/1741362/kingston_hx_hscs_bk_ee_images_1741362158.jpg</img>
+    <img>https://i2.rozetka.ua/goods/2119832/samsung_eo_bg950cbegru_images_2119832470.jpg</img>
   </product>
-  <product id="4">
-    <price>249</price>
+  <product id="1">
+    <price>779</price>
     <desc>
 Тип наушников:
 Вкладыши
@@ -93,332 +20,28 @@
 1 x mini-jack (разъем 3.5 мм)
 Диапазон частот наушников:
 
-10 Гц - 24 кГц
+20 - 40000 Гц
 
 Длина шнура:
 
-1.1 м
-</desc>
-    <img>https://i2.rozetka.ua/goods/8554/panasonic_rp_hje125e_k_6028985_images_8554898.jpg</img>
-  </product>
-  <product id="5">
-    <price>1799</price>
-    <desc>
-Тип наушников:
-Закрытые
-Интерфейс проводного подключения:
-1 x mini-jack (разъем 3.5 мм)
-Диапазон частот наушников:
-
-20 - 20000 Гц
-
-Длина шнура:
-
-1.3 метра, в резиновой оболочке
-Вес:
-
-237 г
-</desc>
-    <img>https://i2.rozetka.ua/goods/2410879/razer_rz04_01720100_plus_rz83_02020100_b3m1_images_2410879409.jpg</img>
-  </product>
-  <product id="6">
-    <price>749</price>
-    <desc>
-Тип наушников:
-Закрытые
-Интерфейс проводного подключения:
-1 x USB
-Диапазон частот наушников:
-
-20 - 22000 Гц
-
-Длина шнура:
-
-2.2 м
+1.25 м
 
 Вес:
 
-330 г
+17 г
 </desc>
-    <img>https://i1.rozetka.ua/goods/2190810/real_el_el124100016_images_2190810175.jpg</img>
+    <img>https://i1.rozetka.ua/goods/1837242/xiaomi_qtej02jy_images_1837242948.jpg</img>
   </product>
-  <product id="7">
+  <product id="2">
     <price>399</price>
     <desc>
 Тип наушников:
-Открытые
-Интерфейс проводного подключения:
-2 x mini-jack (разъем 3.5 мм)
-Диапазон частот наушников:
-
-20 - 20000 Гц
-
-Длина шнура:
-
-1.8 м
-
-Вес:
-
-80 г
-</desc>
-    <img>https://i1.rozetka.ua/goods/5265/logitech_headset_h150_981_000368_images_5265526.jpg</img>
-  </product>
-  <product id="8">
-    <price>1799</price>
-    <desc>
-Тип наушников:
-Закрытые
-Интерфейс проводного подключения:
-1 x mini-jack (разъем 3.5 мм)
-Диапазон частот наушников:
-
-20 - 20 000 Гц
-
-Длина шнура:
-
-1.3 м + 2 м (разветвитель)
-
-Вес:
-
-300 г
-</desc>
-    <img>https://i1.rozetka.ua/goods/1241354/razer_kraken_pro_2015_rz04_01380200_r3m1_images_1241354897.jpg</img>
-  </product>
-  <product id="9">
-    <price>2299</price>
-    <desc>
-Тип наушников:
-Закрытые
-Интерфейс проводного подключения:
-1 x mini-jack (разъем 3.5 мм)
-Диапазон частот наушников:
-
-20 - 22000 Гц
-
-Длина шнура:
-
-3 м
-
-Вес:
-
-350
-</desc>
-    <img>https://i1.rozetka.ua/goods/2316535/steelseries_61437_images_2316535305.jpg</img>
-  </product>
-  <product id="10">
-    <price>405</price>
-    <desc>
-Тип наушников:
-Закрытые
-Интерфейс проводного подключения:
-2 x mini-jack (разъем 3.5 мм)
-Диапазон частот наушников:
-
-20 - 20000 Гц
-
-Длина шнура:
-
-2.4 м
-</desc>
-    <img>https://i2.rozetka.ua/goods/188760/gemix_w_330_images_188760632.jpg</img>
-  </product>
-  <product id="11">
-    <price>1199</price>
-    <desc>
-Тип наушников:
 Вкладыши
-Диапазон частот наушников:
-
-20 - 20000 Гц
-
-Вес:
-
-13 г
-</desc>
-    <img>https://i1.rozetka.ua/goods/2314319/acme_4770070879467_images_2314319153.jpg</img>
-  </product>
-  <product id="12">
-    <price>1199</price>
-    <desc>
-Тип наушников:
-Закрытые
 Интерфейс проводного подключения:
 1 x mini-jack (разъем 3.5 мм)
 Диапазон частот наушников:
 
-20 - 20000 Гц
-
-Длина шнура:
-
-1.3 м
-
-Вес:
-
-215 г
-</desc>
-    <img>https://i2.rozetka.ua/goods/3865782/kingston_hx_hscsc_bk_images_3865782136.jpg</img>
-  </product>
-  <product id="13">
-    <price>2499</price>
-    <desc>
-Тип наушников:
-Закрытые
-Интерфейс проводного подключения:
-1 x mini-jack (разъем 3.5 мм)
-Диапазон частот наушников:
-
-20 - 20 000 Гц
-
-Длина шнура:
-
-1.3 м
-
-Вес:
-
-325 г
-</desc>
-    <img>https://i1.rozetka.ua/goods/1775498/razer_rz04_01920300_r3gm1_images_1775498425.jpg</img>
-  </product>
-  <product id="14">
-    <price>299</price>
-    <desc>
-Тип наушников:
-Вкладыши
-Диапазон частот наушников:
-
-20 - 20000 Гц
-
-Вес:
-
-12 г
-</desc>
-    <img>https://i2.rozetka.ua/goods/2314265/acme_4770070879429_images_2314265929.jpg</img>
-  </product>
-  <product id="15">
-    <price>399</price>
-    <desc>
-Тип наушников:
-Открытые
-Диапазон частот наушников:
-
-20 - 20 000 Гц
-
-Вес:
-
-98 г
-</desc>
-    <img>https://i1.rozetka.ua/goods/7152/rapoo_wireless_stereo_headset_h3070_blue_images_7152416.jpg</img>
-  </product>
-  <product id="16">
-    <price>1089</price>
-    <desc>
-Тип наушников:
-Закрытые
-Интерфейс проводного подключения:
-1 x mini-jack (разъем 3.5 мм)
-Диапазон частот наушников:
-
-21 - 18000 Гц
-
-Длина шнура:
-
-3 м
-
-Вес:
-
-165 г
-</desc>
-    <img>https://i2.rozetka.ua/goods/2175214/sennheiser_507364_images_2175214868.jpg</img>
-  </product>
-  <product id="17">
-    <price>1599</price>
-    <desc>
-Тип наушников:
-Закрытые
-Интерфейс проводного подключения:
-1 x mini-jack (разъем 3.5 мм)
-Диапазон частот наушников:
-
-20 - 20000 Гц
-
-Длина шнура:
-
-ПК: 2.35 м (отделяемый)
-Вес:
-
-185 г
-</desc>
-    <img>https://i2.rozetka.ua/goods/1807535/roccat_roc14_510_images_1807535737.jpg</img>
-  </product>
-  <product id="18">
-    <price>299</price>
-    <desc>
-Тип наушников:
-Закрытые
-Интерфейс проводного подключения:
-2 x mini-jack (разъем 3.5 мм)
-Диапазон частот наушников:
-
-20 - 20000 Гц
-
-Длина шнура:
-
-2.2 м
-
-Вес:
-
-245 г
-</desc>
-    <img>https://i1.rozetka.ua/goods/2767287/aula_6948391232768_images_2767287487.jpg</img>
-  </product>
-  <product id="19">
-    <price>1499</price>
-    <desc>
-Тип наушников:
-Закрытые
-Интерфейс проводного подключения:
-1 x mini-jack (разъем 3.5 мм)
-Диапазон частот наушников:
-
-20 Гц - 20 кГц
-
-Вес:
-
-160.3 г
-</desc>
-    <img>https://i1.rozetka.ua/goods/1687402/klipsch_r6_on_ear_images_1687402959.jpg</img>
-  </product>
-  <product id="20">
-    <price>1799</price>
-    <desc>
-Тип наушников:
-Закрытые
-Интерфейс проводного подключения:
-2 x mini-jack (разъем 3.5 мм)
-Диапазон частот наушников:
-
-20~20 000 Гц
-
-Длина шнура:
-
-2.5 м
-
-Вес:
-
-305 г
-</desc>
-    <img>https://i1.rozetka.ua/goods/198907/roccat_kave_xtd_stereo_roc_14_610_images_198907847.jpg</img>
-  </product>
-  <product id="21">
-    <price>249</price>
-    <desc>
-Тип наушников:
-Закрытые
-Интерфейс проводного подключения:
-1 x mini-jack (разъем 3.5 мм)
-Диапазон частот наушников:
-
-9 - 23000 Гц
+20 Гц — 20 кГц
 
 Длина шнура:
 
@@ -426,131 +49,23 @@
 
 Вес:
 
-78 г
+15 г
 </desc>
-    <img>https://i1.rozetka.ua/goods/1841950/philips_shl4400wt_00_images_1841950623.jpg</img>
+    <img>https://i2.rozetka.ua/goods/1232633/samsung_eo_eg920lregru_images_1232633968.jpg</img>
   </product>
-  <product id="22">
-    <price>1299</price>
-    <desc>
-Тип наушников:
-Закрытые
-Интерфейс проводного подключения:
-1 x mini-jack (разъем 3.5 мм)
-Диапазон частот наушников:
-
-20 - 20000 Гц
-
-Длина шнура:
-
-1.3 метра, в резиновой оболочке
-Вес:
-
-237 г
-</desc>
-    <img>https://i2.rozetka.ua/goods/2093104/razer_rz04_01720100_r3r1_images_2093104706.jpg</img>
-  </product>
-  <product id="23">
-    <price>499</price>
-    <desc>
-Тип наушников:
-Закрытые
-Интерфейс проводного подключения:
-2 x mini-jack (разъем 3.5 мм)
-Диапазон частот наушников:
-
-20 - 20000 Гц
-
-Длина шнура:
-
-1.8 м
-
-Вес:
-
-170 г
-</desc>
-    <img>https://i1.rozetka.ua/goods/1654749/speedlink_sl_860000_bk_images_1654749268.jpg</img>
-  </product>
-  <product id="24">
-    <price>270</price>
-    <desc>
-Тип наушников:
-Закрытые
-Интерфейс проводного подключения:
-2 x mini-jack (разъем 3.5 мм)
-Диапазон частот наушников:
-
-20 – 20000 Гц
-
-Длина шнура:
-
-2.5 м
-
-Вес:
-
-195 г
-</desc>
-    <img>https://i2.rozetka.ua/goods/13068/sven_ap_680mv_images_13068944.jpg</img>
-  </product>
-  <product id="25">
-    <price>566</price>
-    <desc>
-Тип наушников:
-Закрытые
-Интерфейс проводного подключения:
-2 x mini-jack (разъем 3.5 мм)
-Диапазон частот наушников:
-
-20-20000 Гц
-
-Длина шнура:
-
-2.2 м
-
-Вес:
-
-265 г
-</desc>
-    <img>https://i1.rozetka.ua/goods/1776718/sades_sa708_b_r_images_1776718056.jpg</img>
-  </product>
-  <product id="26">
-    <price>1299</price>
-    <desc>
-Тип наушников:
-Закрытые
-Интерфейс проводного подключения:
-1 x USB
-Диапазон частот наушников:
-
-20 Гц - 20 000 Гц
-
-Длина шнура:
-
-2.2 м.
-
-Вес:
-
-258 г
-</desc>
-    <img>https://i2.rozetka.ua/goods/20187/a4tech_bloody_g501_images_20187089.jpg</img>
-  </product>
-  <product id="27">
-    <price>2499</price>
+  <product id="3">
+    <price>2599</price>
     <desc>
 Тип наушников:
 Вкладыши
-Диапазон частот наушников:
-
-200 – 20000 Гц
-
 Вес:
 
-10 г наушники; 84 г павербанк
+45.7 г
 </desc>
-    <img>https://i1.rozetka.ua/goods/3080848/airon_6945545521557_images_3080848823.jpg</img>
+    <img>https://i1.rozetka.ua/goods/1742158/samsung_level_u_pro_anc_black_images_1742158380.jpg</img>
   </product>
-  <product id="28">
-    <price>299</price>
+  <product id="4">
+    <price>199</price>
     <desc>
 Тип наушников:
 Вкладыши
@@ -568,48 +83,105 @@
 
 14 г
 </desc>
-    <img>https://i1.rozetka.ua/goods/1801805/1more_e1009_gy_images_1801805665.jpg</img>
+    <img>https://i1.rozetka.ua/goods/1882711/xiaomi_hsej03jy_matte_black_images_1882711880.jpg</img>
   </product>
-  <product id="29">
-    <price>1699</price>
+  <product id="5">
+    <price>699</price>
+    <desc>
+Вес:
+
+10 г
+</desc>
+    <img>https://i1.rozetka.ua/goods/2148492/xiaomi_ypjsq01jy_images_2148492649.jpg</img>
+  </product>
+  <product id="6">
+    <price>4999</price>
     <desc>
 Тип наушников:
-Закрытые
+Вкладыши
+Вес:
+
+8 г
+</desc>
+    <img>https://i1.rozetka.ua/goods/2414206/copy_samsung_gear_iconx_sm_r150_black_5a2e7724098f3_images_2414206385.jpg</img>
+  </product>
+  <product id="7">
+    <price>249</price>
+    <desc>
+Тип наушников:
+Вкладыши
 Интерфейс проводного подключения:
-1 x USB
+1 x mini-jack (разъем 3.5 мм)
 Диапазон частот наушников:
 
-20 - 20 000 Гц
+20 Гц — 20 кГц
 
 Длина шнура:
 
-1.3 м
+1.2 м
 
 Вес:
 
-294 г
+11.8 г
 </desc>
-    <img>https://i1.rozetka.ua/goods/2341703/razer_rz04_02220100_r3m1_images_2341703617.jpg</img>
+    <img>https://i1.rozetka.ua/goods/1232860/samsung_eo_hs1303gegru_images_1232860068.jpg</img>
   </product>
-  <product id="30">
-    <price>825</price>
+  <product id="8">
+    <price>555</price>
     <desc>
 Тип наушников:
-Закрытые
+Вкладыши
 Интерфейс проводного подключения:
-1 x USB
+1 x mini-jack (разъем 3.5 мм)
 Диапазон частот наушников:
 
-20 – 20000 Гц
+20 - 20000 Гц
+
+Длина шнура:
+
+1.25 м
 
 Вес:
 
-365 г
+14 г
 </desc>
-    <img>https://i2.rozetka.ua/goods/1820756/sven_ap_u988mv_black_red_images_1820756994.jpg</img>
+    <img>https://i1.rozetka.ua/goods/1465137/xiaomi_quantie_hd_images_1465137160.jpg</img>
   </product>
-  <product id="31">
-    <price>499</price>
+  <product id="9">
+    <price>799</price>
+    <desc>
+Тип наушников:
+Вкладыши
+Вес:
+
+17.8 г
+</desc>
+    <img>https://i1.rozetka.ua/goods/2037514/xiaomi_ydlyel01lm_w_images_2037514980.jpg</img>
+  </product>
+  <product id="10">
+    <price>3537</price>
+    <desc>
+Интерфейс проводного подключения:
+1 x mini-jack (разъем 3.5 мм)</desc>
+    <img>https://i1.rozetka.ua/goods/4190633/38972464_images_4190633904.jpg</img>
+  </product>
+  <product id="11">
+    <price>999</price>
+    <desc>
+Тип наушников:
+Вкладыши
+Диапазон частот наушников:
+
+20-20000 Гц
+
+Вес:
+
+14.5 г
+</desc>
+    <img>https://i2.rozetka.ua/goods/2563092/xiaomi_ydlyej02lm_w_images_2563092519.jpg</img>
+  </product>
+  <product id="12">
+    <price>1299</price>
     <desc>
 Тип наушников:
 Закрытые
@@ -617,12 +189,65 @@
 1 x mini-jack (разъем 3.5 мм)
 Диапазон частот наушников:
 
-20 - 20000 Гц
+20 - 40000 Гц
+
+Длина шнура:
+
+1.4 м
 
 Вес:
 
-110 г
+220 г
 </desc>
-    <img>https://i1.rozetka.ua/goods/1540843/acme_bh40_4770070875421_images_1540843977.jpg</img>
+    <img>https://i1.rozetka.ua/goods/1944327/xiaomi_tdser02jy_images_1944327143.jpg</img>
+  </product>
+  <product id="13">
+    <price>1299</price>
+    <desc>
+Тип наушников:
+Вкладыши
+Вес:
+
+35 г
+</desc>
+    <img>https://i1.rozetka.ua/goods/1011302/samsung_eo_bg920bfegru_images_1011302199.jpg</img>
+  </product>
+  <product id="14">
+    <price>5799</price>
+    <desc>
+Тип наушников:
+Закрытые
+Интерфейс проводного подключения:
+1 x mini-jack (разъем 3.5 мм)
+Длина шнура:
+
+1.2 м
+
+Вес:
+
+236 г
+</desc>
+    <img>https://i1.rozetka.ua/goods/1628472/samsung_level_on_pro_black_images_1628472073.jpg</img>
+  </product>
+  <product id="15">
+    <price>329</price>
+    <desc>
+Тип наушников:
+Вкладыши
+Интерфейс проводного подключения:
+1 x mini-jack (разъем 3.5 мм)
+Диапазон частот наушников:
+
+20 - 20 000 Гц
+
+Длина шнура:
+
+1.25 м
+
+Вес:
+
+14 г
+</desc>
+    <img>https://i1.rozetka.ua/goods/1645090/xiaomi_mi_capsule_earphone_black_images_1645090612.jpg</img>
   </product>
 </data>
