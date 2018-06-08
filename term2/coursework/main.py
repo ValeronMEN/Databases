@@ -3,68 +3,25 @@ from generate_data import *
 from filter_data import *
 
 def start():
-    flag_main = True
     read_data_at_start()
     print("Hello, stranger! Welcome to COURSEWORK9000. Type 'help' to call the help menu. Enter the command:")
-    while flag_main:
+    while True:
         inputString = input(">> ").lower().replace(' ', '')
         if inputString == 'help':
             print("Available commands:\n"
                   "type 'help' to help\n"
                   "type 'read' to read the data from .csv files on the computer\n"
+                  "type 'getc' to get all of the characteristicvar descriptions\n"
+                  "type 'getm' to get all of the measurementvar descriptions\n"
                   "type 'generate' to generate some random data\n"
                   "type 'filter' to filter data\n"
                   "type 'analyse' to run the analyst functions\n"
                   "type 'truncate' to truncate the database tables\n"
                   "type 'exit' to exit")
         elif inputString == 'analyse':
-            candidates_votes()
-            party_votes()
-            candidate_votes_democrat()
-            candidate_votes_republican()
-            state_votes_democrat()
-            state_votes_republican()
+            run_the_analysis()
         elif inputString == 'filter':
-            print(""" Filter
-            1 - party
-            2 - state
-            3 - state_abbr
-            4 - candidate
-            5 - votes >
-            6 - votes <
-            7 - quit
-            """)
-
-            b = int(input("Enter the command:"))
-            if b == 7:
-                break
-            if b == 1:
-                print("""1 - Republican 2 - Democrat""")
-                c = int((input("Enter command:")))
-                if c == 1:
-                    filter_party("Republican")
-                if c == 2:
-                    filter_party("Democrat")
-            if b == 2:
-                c = input("Enter state:")
-                filter_state(c)
-            if b == 3:
-                c = input("Enter st_abbr:")
-                filter_st_abbr(c)
-            if b == 4:
-                c = input("Enter candidate:")
-                filter_candidate(c)
-            if b == 5:
-                c = int(input("Enter gt votes:"))
-                filter_votes_gt(c)
-            if b == 6:
-                c = int(input("Enter ls votes:"))
-                filter_votes_ls(c)
-
-            if (b < 1 or b > 7):
-                print("Error number")
-                flag_main = True
-
+            filter_main()
         elif inputString == "read":
             read_data_fast()
         elif inputString == "generate":
@@ -72,7 +29,88 @@ def start():
             generate_data(count)
         elif inputString == "truncate":
             truncate_db()
+        elif inputString == 'getc':
+            read_characteristicvars_table_all()
+        elif inputString == 'getm':
+            read_measurementvars_table_all()
         elif inputString == "exit":
             break
+
+
+def filter_main():
+    print(""" Filter by
+                1 - sex
+                2 - source
+                3 - characteristic variable
+                4 - measurement variable
+                5 - age
+                6 - estimate >
+                7 - estimate <
+                8 - standard error >
+                9 - standard error <
+                10 - unweighted count >
+                11 - unweighted count <
+                12 - quit
+                """)
+
+    filterString = int(input("Enter the number to filter by proposed criterium\n>> "))
+    if filterString == 12:
+        return
+    elif filterString == 1:
+        print("""
+                    1 - Male 
+                    2 - Female
+                    3 - All adults
+                    """)
+        c = int((input("Enter the number\n>> ")))
+        if c == 1:
+            filter_by_sex("Male")
+        elif c == 2:
+            filter_by_sex("Female")
+        elif c == 3:
+            filter_by_sex("All adults")
+        else:
+            print("Error input")
+    elif filterString == 2:
+        c = input("Enter the source\n>> ")
+        filter_source(c)
+    elif filterString == 3:
+        c = input("Enter the CharacteristicVar\n>> ")
+        if (filter_characteristicvars_table_by_name(c) == 1):
+            print("Error value")
+        else:
+            print("Entities from the demography table:")
+            filter_by_charactheristicvar(c)
+    elif filterString == 4:
+        c = input("Enter the MeasurementVar\n>> ")
+        if (filter_measurementvars_table_by_name(c) == 1):
+            print("Error value")
+        else:
+            print("Entities from the demography table:")
+            filter_by_measurementvar(c)
+    elif filterString == 5:
+        c = input("Enter the age bounds\n>> ")
+        filter_by_age(c)
+    elif filterString == 6:
+        c = (input("Enter the estimate less than you want to see\n>> "))
+        filter_by_estimate_gt(c)
+    elif filterString == 7:
+        c = (input("Enter the estimate greater than you want to see\n>> "))
+        filter_by_estimate_lt(c)
+    elif filterString == 8:
+        c = (input("Enter the StandardError less than you want to see\n>> "))
+        filter_by_standarderror_gt(c)
+    elif filterString == 9:
+        c = (input("Enter the StandardError greater than you want to see\n>> "))
+        filter_by_standarderror_lt(c)
+    elif filterString == 10:
+        c = (input("Enter the unweighted count less than you want to see\n>> "))
+        filter_by_unweightedcount_gt(c)
+    elif filterString == 11:
+        c = (input("Enter the unweighted count greater than you want to see\n>> "))
+        filter_by_unweightedcount_lt(c)
+    else:
+        print("Error input")
+
 
 start()

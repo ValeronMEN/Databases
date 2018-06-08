@@ -57,15 +57,59 @@ CHARACTERISTIC = [
 ]
 
 
-def read_table(tableName, columnName):
+def read_table_column(tableName, columnName):
     conn = connect_db()
     cursor = conn.cursor()
-    cursor.execute("SELECT %s FROM %s" % (columnName, tableName))
+    s = "SELECT %s FROM %s" % (columnName, tableName)
+    cursor.execute(s)
     res = cursor.fetchall()
     listToReturn = []
     for elem in res:
         listToReturn.append(elem)
     return listToReturn
+
+
+def read_table_all(tableName):
+    list = read_table_column(tableName, "*")
+    for el in list:
+        print(el)
+
+
+def read_characteristicvars_table_all():
+    read_table_all("public.characteristicvars")
+
+
+def read_measurementvars_table_all():
+    read_table_all("public.measurementvars")
+
+
+def filter_table(tableName, column, value):
+    conn = connect_db()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM %s WHERE %s=$$%s$$" % (tableName, column, value))
+    res = cursor.fetchall()
+    for elem in res:
+        print(elem)
+    if(len(res) >= 1):
+        return 0
+    else:
+        return 1
+
+
+def filter_characteristicvars_table(column, value):
+    filter_table("public.characteristicvars", column, value)
+
+
+def filter_measurementvars_table(column, value):
+    filter_table("public.measurementvars", column, value)
+
+
+def filter_characteristicvars_table_by_name(value):
+    return filter_characteristicvars_table("characteristicvar", value)
+
+
+def filter_measurementvars_table_by_name(value):
+    return filter_measurementvars_table("measurementvar", value)
 
 
 def insert_demography_data(source, period, year, quarter, lfsweight, measurementvar, geography, householdtype, sex, age,
@@ -84,8 +128,8 @@ def insert_demography_data(source, period, year, quarter, lfsweight, measurement
 
 
 def generate_data(count):
-    mesurementList = read_table("public.measurementvars", "measurementvar")
-    characteristicList = read_table("public.characteristicvars", "characteristicvar")
+    mesurementList = read_table_column("public.measurementvars", "measurementvar")
+    characteristicList = read_table_column("public.characteristicvars", "characteristicvar")
     for i in range(count):
         source = random.choice(SOURCE)
         age = random.choice(AGE)
